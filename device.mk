@@ -182,6 +182,10 @@ PRODUCT_PACKAGES += \
     keystore.msm8994 \
     gatekeeper.msm8994
 
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8994
+
 # Media
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \

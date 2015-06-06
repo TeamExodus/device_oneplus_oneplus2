@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +37,24 @@
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
-const char *const LCD_FILE
+static struct light_state_t g_attention;
+static struct light_state_t g_notification;
+static struct light_state_t g_battery;
+
+char const*const RED_LED_FILE
+        = "/sys/class/leds/red/brightness";
+
+char const*const GREEN_LED_FILE
+        = "/sys/class/leds/green/brightness";
+
+char const*const BLUE_LED_FILE
+        = "/sys/class/leds/blue/brightness";
+
+char const*const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
+
+char const*const BUTTON_FILE
+        = "/sys/class/leds/button-backlight/brightness";
 
 /**
  * device methods
@@ -51,32 +67,25 @@ void init_globals(void)
 }
 
 static int
-write_string(const char *path, const char *buffer)
+write_int(char const* path, int value)
 {
     int fd;
     static int already_warned = 0;
 
     fd = open(path, O_RDWR);
     if (fd >= 0) {
-        int bytes = strlen(buffer);
-        int amt = write(fd, buffer, bytes);
+        char buffer[20];
+        int bytes = snprintf(buffer, sizeof(buffer), "%d\n", value);
+        ssize_t amt = write(fd, buffer, (size_t)bytes);
         close(fd);
         return amt == -1 ? -errno : 0;
     } else {
         if (already_warned == 0) {
-            ALOGE("write_string failed to open %s (%s)\n", path, strerror(errno));
+            ALOGE("write_int failed to open %s\n", path);
             already_warned = 1;
         }
         return -errno;
     }
-}
-
-static int
-write_int(const char *path, int value)
-{
-    char buffer[20];
-    sprintf(buffer, "%d\n", value);
-    return write_string(path, buffer);
 }
 
 static int
@@ -89,7 +98,61 @@ rgb_to_brightness(const struct light_state_t *state)
 }
 
 static int
-set_light_backlight(__attribute__ ((unused)) struct light_device_t *dev,
+is_lit(const struct light_state_t *state)
+{
+    return (state->color & 0x00ffffff);
+}
+
+static int
+set_speaker_light_locked(struct light_device_t* dev,
+        struct light_state_t const* state)
+{
+    int red, green, blue;
+    unsigned int colorRGB;
+
+    if(!dev) {
+        return -1;
+    }
+    if (state == NULL) {
+        write_int(RED_LED_FILE, 0);
+        write_int(GREEN_LED_FILE, 0);
+        write_int(BLUE_LED_FILE, 0);
+        return 0;
+    }
+
+    colorRGB = state->color;
+
+#if 0
+    ALOGD("set_speaker_light_locked mode %d, colorRGB=%08X, onMS=%d, offMS=%d\n",
+            state->flashMode, colorRGB, onMS, offMS);
+#endif
+
+    red = (colorRGB >> 16) & 0xFF;
+    green = (colorRGB >> 8) & 0xFF;
+    blue = colorRGB & 0xFF;
+
+    write_int(RED_LED_FILE, red);
+    write_int(GREEN_LED_FILE, green);
+    write_int(BLUE_LED_FILE, blue);
+
+    return 0;
+}
+
+static void
+handle_speaker_light_locked(struct light_device_t *dev)
+{
+    set_speaker_light_locked(dev, NULL);
+    if (is_lit(&g_attention)) {
+        set_speaker_light_locked(dev, &g_attention);
+    } else if (is_lit(&g_notification)) {
+        set_speaker_light_locked(dev, &g_notification);
+    } else {
+        set_speaker_light_locked(dev, &g_battery);
+    }
+}
+
+static int
+set_light_backlight(struct light_device_t *dev __attribute__((unused)),
         const struct light_state_t *state)
 {
     int err = 0;
@@ -102,6 +165,48 @@ set_light_backlight(__attribute__ ((unused)) struct light_device_t *dev,
     pthread_mutex_unlock(&g_lock);
 
     return err;
+}
+
+static int
+set_light_attention(struct light_device_t *dev,
+        const struct light_state_t *state)
+{
+    pthread_mutex_lock(&g_lock);
+
+    g_attention = *state;
+    handle_speaker_light_locked(dev);
+
+    pthread_mutex_unlock(&g_lock);
+
+    return 0;
+}
+
+static int
+set_light_notifications(struct light_device_t *dev,
+        const struct light_state_t *state)
+{
+    pthread_mutex_lock(&g_lock);
+
+    g_notification = *state;
+    handle_speaker_light_locked(dev);
+
+    pthread_mutex_unlock(&g_lock);
+
+    return 0;
+}
+
+static int
+set_light_battery(struct light_device_t *dev,
+        const struct light_state_t *state)
+{
+    pthread_mutex_lock(&g_lock);
+
+    g_battery = *state;
+    handle_speaker_light_locked(dev);
+
+    pthread_mutex_unlock(&g_lock);
+
+    return 0;
 }
 
 /** Close the lights device */
@@ -129,6 +234,12 @@ static int open_lights(const struct hw_module_t *module, const char *name,
 
     if (0 == strcmp(LIGHT_ID_BACKLIGHT, name))
         set_light = set_light_backlight;
+    else if (0 == strcmp(LIGHT_ID_NOTIFICATIONS, name))
+        set_light = set_light_notifications;
+    else if (0 == strcmp(LIGHT_ID_ATTENTION, name))
+        set_light = set_light_attention;
+    else if (0 == strcmp(LIGHT_ID_BATTERY, name))
+        set_light = set_light_battery;
     else
         return -EINVAL;
 

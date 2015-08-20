@@ -48,6 +48,7 @@ audio.dolby.ds2.enabled=true
 audio.dolby.ds2.hardbypass=true
 audio.offload.passthrough=false
 av.debug.disable.pers.cache=true
+ro.audio.flinger_standbytime_ms=300
 
 # Bluetooth
 bluetooth.hfp.client=1

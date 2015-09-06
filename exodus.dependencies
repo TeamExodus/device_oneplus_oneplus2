@@ -1,0 +1,10 @@
+[
+    {
+        "repository": "kernel_oneplus_msm8994",
+        "target_path": "kernel/oneplus/msm8994"
+    },
+    {
+        "repository": "proprietary_vendor_oneplus",
+        "target_path": "vendor/oneplus2",
+    }
+]

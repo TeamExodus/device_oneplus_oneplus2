@@ -1,0 +1,7 @@
+[
+  {
+    "repository": "proprietary_vendor_oneplus",
+    "target_path": "vendor/oneplus2",
+    "branch"' "cm-12.1"
+  }
+]

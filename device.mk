@@ -166,13 +166,13 @@ PRODUCT_COPY_FILES += \
 
 # Keyhandler
 PRODUCT_PACKAGES += \
-    ConfigPanel \
-    com.cyanogenmod.keyhandler
+    ConfigPanelOpt \
+    com.cyanogenmod.keyhandleropt
 
-PRODUCT_SYSTEM_SERVER_JARS += com.cyanogenmod.keyhandler
+PRODUCT_SYSTEM_SERVER_JARS += com.cyanogenmod.keyhandleropt
 
-# never dexopt the keyhandler
-$(call add-product-dex-preopt-module-config,com.cyanogenmod.keyhandler,disable)
+# never dexopt the keyhandleropt
+$(call add-product-dex-preopt-module-config,com.cyanogenmod.keyhandleropt,disable)
 
 # Keymaster
 PRODUCT_PACKAGES += \

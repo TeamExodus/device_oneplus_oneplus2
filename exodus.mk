@@ -20,6 +20,9 @@ $(call inherit-product, vendor/exodus/config/common_full_phone.mk)
 # Inherit oneplus2-specific vendor tree
 $(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 
+# Inherit from oppo-common
+$(call inherit-product, device/oppo/common/common.mk)
+
 TARGET_VENDOR := oneplus
 TARGET_VENDOR_PRODUCT_NAME := oneplus2
 TARGET_VENDOR_DEVICE_NAME := A2001

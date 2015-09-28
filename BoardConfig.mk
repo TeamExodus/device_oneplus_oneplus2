@@ -24,8 +24,6 @@ TARGET_OTA_ASSERT_DEVICE := OnePlus2,oneplus2
 
 BOARD_VENDOR := oneplus
 
-PRODUCT_COPY_FILES := $(filter-out frameworks/base/data/keyboards/Generic.kl:system/usr/keylayout/Generic.kl, $(PRODUCT_COPY_FILES))
-
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8994
 TARGET_NO_BOOTLOADER := true
@@ -182,7 +180,10 @@ include device/qcom/sepolicy/sepolicy.mk
 BOARD_USES_QC_TIME_SERVICES := true
 
 # CM Hardware
-BOARD_HARDWARE_CLASS := device/oneplus/oneplus2/cmhw
+BOARD_USES_CYANOGEN_HARDWARE := true
+BOARD_HARDWARE_CLASS += \
+    device/oneplus/oneplus2/cmhw \
+    hardware/cyanogen/cmhw
 
 # inherit from the proprietary version
 -include vendor/oneplus/oneplus2/BoardConfigVendor.mk

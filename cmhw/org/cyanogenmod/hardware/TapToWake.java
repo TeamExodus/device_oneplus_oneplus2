@@ -17,32 +17,22 @@
 package org.cyanogenmod.hardware;
 
 import java.io.File;
+
 import org.cyanogenmod.hardware.util.FileUtils;
 
-public class DisplayColorCalibration {
-    private static final String COLOR_FILE = "/sys/class/graphics/fb0/rgb";
+public class TapToWake {
+
+    private static String CONTROL_PATH = "/proc/touchpanel/double_tap_enable";
 
     public static boolean isSupported() {
-        return new File(COLOR_FILE).exists();
+        return new File(CONTROL_PATH).exists();
     }
 
-    public static int getMaxValue()  {
-        return 32768;
+    public static boolean isEnabled()  {
+        return "1".equals(FileUtils.readOneLine(CONTROL_PATH));
     }
 
-    public static int getMinValue()  {
-        return 255;
-    }
-
-    public static int getDefValue() {
-        return getMaxValue();
-    }
-
-    public static String getCurColors()  {
-        return FileUtils.readOneLine(COLOR_FILE);
-    }
-
-    public static boolean setColors(String colors) {
-        return FileUtils.writeLine(COLOR_FILE, colors);
+    public static boolean setEnabled(boolean state)  {
+        return FileUtils.writeLine(CONTROL_PATH, (state ? "1" : "0"));
     }
 }

@@ -48,10 +48,12 @@ PRODUCT_PACKAGES += \
 
 # Qcom init scripts for /etc
 PRODUCT_PACKAGES += \
-   init.qcom.bt.sh \
-   init.qcom.fm.sh \
-   init.qcom.post_boot.sh \
-   init.qcom.uicc.sh
+    init.qcom.bt.sh \
+    init.qcom.fm.sh \
+    init.qcom.post_boot.sh \
+    init.qcom.uicc.sh \
+    msm8994_hmp.sh \
+    msm8994_tune.sh
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -160,8 +162,17 @@ PRODUCT_COPY_FILES += \
 # Keylayouts
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl \
-    $(LOCAL_PATH)/keylayout/Generic.kl:system/usr/keylayout/Generic.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl
+    $(LOCAL_PATH)/keylayout/synaptics.kl:system/usr/keylayout/synaptics.kl
+
+# Keyhandler
+PRODUCT_PACKAGES += \
+    ConfigPanel \
+    com.cyanogenmod.keyhandler
+
+PRODUCT_SYSTEM_SERVER_JARS += com.cyanogenmod.keyhandler
+
+# never dexopt the keyhandler
+$(call add-product-dex-preopt-module-config,com.cyanogenmod.keyhandler,disable)
 
 # Keymaster
 PRODUCT_PACKAGES += \

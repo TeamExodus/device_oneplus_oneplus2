@@ -654,7 +654,7 @@ service qmuxd /system/bin/qmuxd
 
 service netmgrd /system/bin/netmgrd
     class main
-    group radio
+    group radio system
 
 service qcom-sh /system/bin/sh /init.qcom.sh
     class core

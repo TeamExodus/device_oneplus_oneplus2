@@ -241,6 +241,10 @@ set_speaker_light_locked(struct light_device_t* dev,
     red = (colorRGB >> 16) & 0xFF;
     green = (colorRGB >> 8) & 0xFF;
     blue = colorRGB & 0xFF;
+    // bias for true white
+    if (colorRGB != 0 && red == green && green == blue) {
+        blue = (blue * 171) / 256;
+    }
     blink = onMS > 0 && offMS > 0;
 
     // disable all blinking to start

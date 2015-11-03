@@ -148,8 +148,11 @@ PRODUCT_PACKAGES += \
     flp.conf \
     gps.conf \
     izat.conf \
+    lowi.conf \
+    msap.conf \
     quipc.conf \
-    sap.conf
+    sap.conf \
+    xtwifi.conf
 
 # IRQ
 PRODUCT_COPY_FILES += \
@@ -206,7 +209,7 @@ PRODUCT_BOOT_JARS += qcmediaplayer
 
 # Modules
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/modules/core_ctl.ko:system/lib/modules/core_ctl.ko \
+    $(LOCAL_PATH)/modules/core_ctl.ko:system/lib/modules/core_ctl.ko
 
 # Power
 PRODUCT_PACKAGES += \
@@ -220,8 +223,7 @@ PRODUCT_COPY_FILES += \
 
 # Sensors
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf \
-    $(LOCAL_PATH)/configs/fpc1021.conf:system/etc/fpc1021.conf
+    $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
 
 # Thermal config
 PRODUCT_COPY_FILES += \
@@ -235,15 +237,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/qca_cld/WCNSS_cfg.dat \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin \
-    $(LOCAL_PATH)/wifi/lowi.conf:system/etc/lowi.conf \
-    $(LOCAL_PATH)/wifi/msap.conf:system/etc/msap.conf \
-    $(LOCAL_PATH)/wifi/xtwifi.conf:system/etc/xtwifi.conf
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
     libwpa_client \
     hostapd \
+    dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf \
     wpa_supplicant_overlay.conf \
@@ -253,7 +254,8 @@ PRODUCT_PACKAGES += \
     hostapd.deny
 
 PRODUCT_PACKAGES += \
-    wcnss_service
+    wcnss_service \
+    libwcnss_qmi
 
 # Misc dependency packages
 PRODUCT_PACKAGES += \

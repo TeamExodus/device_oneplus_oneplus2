@@ -135,6 +135,19 @@ $(WCD9320_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WCD9320_SYMLINKS)
 
+WLAN_IMAGES := \
+    bdwlan30.bin bdwlan31.bin otp30.bin qwlan30.bin
+
+WLAN_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/,$(notdir $(WLAN_IMAGES)))
+
+$(WLAN_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
+	@echo "WLAN firmware link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf /firmware/image/$(notdir $@) $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(WLAN_SYMLINKS)
+
 $(shell mkdir -p $(TARGET_OUT_ETC)/firmware; \
     ln -sf /dev/block/bootdevice/by-name/msadp \
         $(TARGET_OUT_ETC)/firmware/msadp)
@@ -142,7 +155,7 @@ $(shell mkdir -p $(TARGET_OUT_ETC)/firmware; \
 # Create a link for the WCNSS config file, which ends up as a writable
 # version in /data/misc/wifi
 $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/qca_cld; \
-    ln -sf /system/etc/wifi/WCNSS_qcom_cfg.ini \
+    ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
         $(TARGET_OUT_ETC)/firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini)
 
 endif

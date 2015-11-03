@@ -38,6 +38,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.Settings.Global;
@@ -52,6 +53,9 @@ public class KeyHandler implements DeviceKeyHandler {
 
     private static final String TAG = KeyHandler.class.getSimpleName();
     private static final int GESTURE_REQUEST = 1;
+
+    private static final String KEY_GESTURE_HAPTIC_FEEDBACK =
+            "touchscreen_gesture_haptic_feedback";
 
     private static final String ACTION_DISMISS_KEYGUARD =
             "com.android.keyguard.action.DISMISS_KEYGUARD_SECURELY";
@@ -88,10 +92,13 @@ public class KeyHandler implements DeviceKeyHandler {
     private SensorManager mSensorManager;
     private TorchManager mTorchManager;
     private Sensor mProximitySensor;
-    WakeLock mProximityWakeLock;
-    WakeLock mGestureWakeLock;
+    private Vibrator mVibrator;
+    private WakeLock mProximityWakeLock;
+    private WakeLock mGestureWakeLock;
     private int mProximityTimeOut;
     private boolean mProximityWakeSupported;
+
+    private boolean mNotificationSliderVibrate;
 
     public KeyHandler(Context context) {
         mContext = context;
@@ -112,6 +119,11 @@ public class KeyHandler implements DeviceKeyHandler {
             mProximityWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                     "ProximityWakeLock");
         }
+
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (mVibrator == null || !mVibrator.hasVibrator()) {
+            mVibrator = null;
+        }
     }
 
     private void ensureKeyguardManager() {
@@ -131,10 +143,11 @@ public class KeyHandler implements DeviceKeyHandler {
         @Override
         public void handleMessage(Message msg) {
             KeyEvent event = (KeyEvent) msg.obj;
-            switch (event.getScanCode()) {
+            int scanCode = event.getScanCode();
+            switch (scanCode) {
             case GESTURE_CIRCLE_SCANCODE:
                 ensureKeyguardManager();
-                String action = null;
+                final String action;
                 mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
                 if (mKeyguardManager.isKeyguardSecure() && mKeyguardManager.isKeyguardLocked()) {
                     action = MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE;
@@ -146,32 +159,41 @@ public class KeyHandler implements DeviceKeyHandler {
                 mPowerManager.wakeUp(SystemClock.uptimeMillis());
                 Intent intent = new Intent(action, null);
                 startActivitySafely(intent);
+                doHapticFeedback();
                 break;
             case GESTURE_TWO_SWIPE_SCANCODE:
                 dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                doHapticFeedback();
                 break;
             case GESTURE_V_SCANCODE:
                 ensureTorchManager();
                 mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
                 mTorchManager.toggleTorch();
+                doHapticFeedback();
                 break;
             case GESTURE_LTR_SCANCODE:
                 dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                doHapticFeedback();
                 break;
             case GESTURE_GTR_SCANCODE:
                 dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
+                doHapticFeedback();
                 break;
             case MODE_MUTE:
-                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
-                        Global.ZEN_MODE_NO_INTERRUPTIONS);
-                break;
             case MODE_DO_NOT_DISTURB:
-                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
-                        Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
-                break;
             case MODE_NORMAL:
+                int zenMode = Global.ZEN_MODE_OFF;
+                if (scanCode == MODE_MUTE) {
+                    zenMode = Global.ZEN_MODE_NO_INTERRUPTIONS;
+                } else if (scanCode == MODE_DO_NOT_DISTURB) {
+                    zenMode = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
+                }
                 Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
-                        Global.ZEN_MODE_OFF);
+                        zenMode);
+                if (mNotificationSliderVibrate) {
+                    doHapticFeedback();
+                }
+                mNotificationSliderVibrate = true;
                 break;
             }
         }
@@ -185,6 +207,7 @@ public class KeyHandler implements DeviceKeyHandler {
         if (isKeySupported && !mEventHandler.hasMessages(GESTURE_REQUEST)) {
             if (event.getScanCode() == KEY_DOUBLE_TAP && !mPowerManager.isScreenOn()) {
                 mPowerManager.wakeUpWithProximityCheck(SystemClock.uptimeMillis());
+                doHapticFeedback();
                 return true;
             }
             Message msg = getMessageForKeyEvent(event);
@@ -255,6 +278,17 @@ public class KeyHandler implements DeviceKeyHandler {
             mContext.startActivityAsUser(intent, null, user);
         } catch (ActivityNotFoundException e) {
             // Ignore
+        }
+    }
+
+    private void doHapticFeedback() {
+        if (mVibrator == null) {
+            return;
+        }
+        boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
+                KEY_GESTURE_HAPTIC_FEEDBACK, 1) != 0;
+        if (enabled) {
+            mVibrator.vibrate(50);
         }
     }
 }

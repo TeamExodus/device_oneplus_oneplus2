@@ -38,6 +38,7 @@ PRODUCT_PACKAGES += \
     init.msm8994.sensor.sh \
     init.qcom.power.rc \
     init.qcom.rc \
+    init.qcom.ssr.rc \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
     init.recovery.qcom.rc \

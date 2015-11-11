@@ -31,11 +31,12 @@
 
 #include <gps_extended.h>
 
+struct FlpExtLocation;
+struct FlpExtBatchOptions;
+
 namespace loc_core {
 
 class LocAdapterBase;
-class FlpExtLocation;
-class FlpExtBatchOptions;
 
 class UlpProxyBase {
 public:

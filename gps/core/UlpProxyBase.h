@@ -31,7 +31,7 @@
 
 #include <gps_extended.h>
 
-struct FlpExtLocation;
+struct FlpExtLocation_s;
 struct FlpExtBatchOptions;
 
 namespace loc_core {
@@ -75,7 +75,7 @@ public:
                                               bool active) {
         return false;
     }
-    inline virtual bool reportPositions(const FlpExtLocation* locations,
+    inline virtual bool reportPositions(const struct FlpExtLocation_s* locations,
                                         int32_t number_of_locations) {
         return false;
     }

@@ -167,15 +167,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl \
     $(LOCAL_PATH)/keylayout/synaptics.kl:system/usr/keylayout/synaptics.kl
 
-# Keyhandler
-PRODUCT_PACKAGES += \
-    ConfigPanelOpt \
-    com.cyanogenmod.keyhandleropt
-
-PRODUCT_SYSTEM_SERVER_JARS += com.cyanogenmod.keyhandleropt
-
-# never dexopt the keyhandleropt
-$(call add-product-dex-preopt-module-config,com.cyanogenmod.keyhandleropt,disable)
 
 # Keymaster
 PRODUCT_PACKAGES += \
@@ -267,3 +258,6 @@ PRODUCT_PACKAGES += \
     libcnefeatureconfig \
     libtinyxml \
     libxml2
+
+# Inherit from oppo-common
+$(call inherit-product, device/oppo/common/common.mk)

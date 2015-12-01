@@ -20,6 +20,9 @@
 # definition file).
 #
 
+# Inherit from oppo-common
+-include device/oppo/common/BoardConfigCommon.mk
+
 TARGET_OTA_ASSERT_DEVICE := OnePlus2,oneplus2
 
 BOARD_VENDOR := oneplus
@@ -51,16 +54,16 @@ TARGET_BOARD_SUFFIX := _64
 TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
-BOARD_CUSTOM_BOOTIMG_MK := device/oneplus/oneplus2/mkbootimg.mk
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_IMAGE_NAME := Image
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET := 0x01000000
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
+BOARD_MKBOOTIMG_ARGS := --tags_offset 0x00000100
+TARGET_CUSTOM_DTBTOOL := dtbToolOP2
 TARGET_KERNEL_SOURCE := kernel/oneplus/msm8994
 TARGET_KERNEL_CONFIG := cm_oneplus2_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
@@ -128,9 +131,6 @@ TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_LIBINIT_DEFINES_FILE := device/oneplus/oneplus2/init/init_oneplus2.c
 
-# Power
-TARGET_POWERHAL_VARIANT := qcom
-
 # RPC
 TARGET_NO_RPC := true
 
@@ -178,12 +178,6 @@ BOARD_SEPOLICY_DIRS += device/oneplus/oneplus2/sepolicy
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
-
-# CM Hardware
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS += \
-    device/oneplus/oneplus2/cmhw \
-    hardware/cyanogen/cmhw
 
 # inherit from the proprietary version
 -include vendor/oneplus/oneplus2/BoardConfigVendor.mk

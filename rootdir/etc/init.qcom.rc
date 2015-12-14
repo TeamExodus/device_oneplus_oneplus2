@@ -672,6 +672,7 @@ on property:init.svc.surfaceflinger=running
     start ppd
 
 on property:vold.decrypt=trigger_restart_framework
+    start config_bt_addr
     start config_bluetooth
 
 on property:persist.env.fastdorm.enabled=true
@@ -719,6 +720,12 @@ service hci_filter_root /system/bin/wcnss_filter
     user bluetooth
     group bluetooth qcom_diag net_bt_stack system
     disabled
+
+service config_bt_addr /system/bin/btnvtool -O
+    class core
+    user bluetooth
+    group bluetooth radio
+    oneshot
 
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core

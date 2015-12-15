@@ -52,7 +52,7 @@ TARGET_BOARD_SUFFIX := _64
 TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_SEPARATED_DT := true
@@ -174,40 +174,6 @@ TARGET_RECOVERY_FSTAB := device/oneplus/oneplus2/rootdir/etc/fstab.qcom
 include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += device/oneplus/oneplus2/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-    adspd.te \
-    atfwd.te \
-    bluetooth_loader.te \
-    bridge.te \
-    camera.te \
-    device.te \
-    file.te \
-    gsiffd.te \
-    healthd.te \
-    init.te \
-    init_shell.te \
-    irsc_util.te \
-    mdm_helper.te \
-    mediaserver.te \
-    mpdecision.te \
-    mm-qcamerad.te \
-    qmux.te \
-    qseecomd.te \
-    rild.te \
-    rmt_storage.te \
-    ueventd.te \
-    sensors.te \
-    surfaceflinger.te \
-    system_app.te \
-    system_server.te \
-    tee.te \
-    wcnss_service.te \
-    ueventd.te \
-    usb_uicc_daemon.te \
-    file_contexts \
-    genfs_contexts \
-    property_contexts
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true

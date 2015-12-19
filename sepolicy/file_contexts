@@ -25,3 +25,6 @@
 /sys/devices/soc.0/tri_state_key.82/keyCode_bottom              u:object_r:touchscreen_file:s0
 
 /data/oemnvitems(/.*)?                                          u:object_r:nv_data_file:s0
+
+# Perf
+/system/bin/perfd                                               u:object_r:perfd_exec:s0

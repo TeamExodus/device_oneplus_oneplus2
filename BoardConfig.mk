@@ -176,9 +176,6 @@ include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += device/oneplus/oneplus2/sepolicy
 
-# Time services
-BOARD_USES_QC_TIME_SERVICES := true
-
 # CM Hardware
 BOARD_USES_CYANOGEN_HARDWARE := true
 BOARD_HARDWARE_CLASS += \

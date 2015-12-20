@@ -34,3 +34,5 @@
 /data/misc/fp/metadata                                          u:object_r:fingerprint_metadata:s0
 /data/misc/fp/cac_data                                          u:object_r:fingerprint_data:s0
 /data/misc/fp/sfs(/.*)?                                         u:object_r:fingerprint_data:s0
+/sys/devices/virtual/fpsensor/fpc1020/clock_enable              u:object_r:fingerprint_sysfs:s0
+/sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch              u:object_r:fingerprint_sysfs:s0

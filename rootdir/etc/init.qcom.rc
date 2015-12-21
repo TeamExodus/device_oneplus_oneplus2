@@ -509,6 +509,10 @@ service per_proxy /system/bin/pm-proxy
     group system net_raw
     disabled
 
+service fingerprintd /system/bin/fingerprintd
+    class late_start
+    user system
+
 on property:init.svc.per_mgr=running
     start per_proxy
 

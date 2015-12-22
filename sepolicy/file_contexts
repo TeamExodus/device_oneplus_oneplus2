@@ -26,9 +26,6 @@
 
 /data/oemnvitems(/.*)?                                          u:object_r:nv_data_file:s0
 
-# Perf
-/system/bin/perfd                                               u:object_r:perfd_exec:s0
-
 /dev/fpc1020                                                    u:object_r:fingerprint_device:s0
 /data/misc/fp                                                   u:object_r:fingerprint_dir:s0
 /data/misc/fp/metadata                                          u:object_r:fingerprint_metadata:s0

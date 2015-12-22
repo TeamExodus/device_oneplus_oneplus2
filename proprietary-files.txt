@@ -347,7 +347,7 @@ etc/firmware/venus.mdt
 # Perf
 bin/energy-awareness
 bin/msm_irqbalance
-bin/perfd
+bin/perfd:vendor/bin/perfd
 vendor/lib64/libqti-perfd-client.so
 vendor/lib/libqti-perfd-client.so
 

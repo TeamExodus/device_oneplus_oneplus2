@@ -156,16 +156,17 @@ PRODUCT_PACKAGES += \
     fingerprintd
 
 # GPS
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/gps/etc/flp.conf:system/etc/flp.conf \
+    $(LOCAL_PATH)/gps/etc/gps.conf:system/etc/gps.conf \
+    $(LOCAL_PATH)/gps/etc/izat.conf:system/etc/izat.conf \
+    $(LOCAL_PATH)/gps/etc/quipc.conf:system/etc/quipc.conf \
+    $(LOCAL_PATH)/gps/etc/sap.conf:system/etc/sap.conf \
+    $(LOCAL_PATH)/gps/etc/lowi.conf:system/etc/lowi.conf \
+    $(LOCAL_PATH)/gps/etc/xtwifi.conf:system/etc/xtwifi.conf
+
 PRODUCT_PACKAGES += \
-    gps.msm8994 \
-    flp.conf \
-    gps.conf \
-    izat.conf \
-    lowi.conf \
-    msap.conf \
-    quipc.conf \
-    sap.conf \
-    xtwifi.conf
+    gps.msm8994
 
 # IRQ
 PRODUCT_COPY_FILES += \

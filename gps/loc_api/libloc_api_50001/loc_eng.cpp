@@ -815,11 +815,13 @@ void LocEngReportPosition::proc() const {
             locEng->adapter->setInSession(false);
         }
 
+        LOC_LOGV("LocEngReportPosition::proc() - generateNmea: %d, position source: %d, "
+                 "engine_status: %d, isInSession: %d",
+                        locEng->generateNmea, mLocation.position_source,
+                        locEng->engine_status, locEng->adapter->isInSession());
+
         if (locEng->generateNmea &&
-            mLocation.position_source == ULP_LOCATION_IS_FROM_GNSS &&
-            mTechMask & (LOC_POS_TECH_MASK_SATELLITE |
-                         LOC_POS_TECH_MASK_SENSORS |
-                         LOC_POS_TECH_MASK_HYBRID))
+            locEng->adapter->isInSession())
         {
             unsigned char generate_nmea = reported &&
                                           (mStatus != LOC_SESS_FAILURE);
@@ -850,7 +852,7 @@ void LocEngReportPosition::send() const {
 
 //        case LOC_ENG_MSG_REPORT_SV:
 LocEngReportSv::LocEngReportSv(LocAdapterBase* adapter,
-                               GpsSvStatus &sv,
+                               GnssSvStatus &sv,
                                GpsLocationExtended &locExtended,
                                void* svExt) :
     LocMsg(), mAdapter(adapter), mSvStatus(sv),

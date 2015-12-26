@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -35,6 +35,8 @@ extern "C" {
 
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include <hardware/gps.h>
 
 /** Location has valid source information. */
@@ -289,6 +291,47 @@ typedef struct GpsExtLocation_s {
     int64_t         timestamp;
     uint32_t        sources_used;
 } GpsExtLocation;
+
+/** Represents SV status. */
+typedef struct {
+    /** set to sizeof(GnssSvStatus) */
+    size_t          size;
+
+    /** Number of SVs currently visible. */
+    int         num_svs;
+
+    /** Contains an array of SV information. */
+    GpsSvInfo   sv_list[GPS_MAX_SVS];
+
+    /** Represents a bit mask indicating which SVs
+     * have ephemeris data.
+     */
+    uint32_t    ephemeris_mask;
+
+    /** Represents a bit mask indicating which SVs
+     * have almanac data.
+     */
+    uint32_t    almanac_mask;
+
+    /**
+     * Represents a bit mask indicating which GPS SVs
+     * were used for computing the most recent position fix.
+     */
+    uint32_t    gps_used_in_fix_mask;
+
+    /**
+     * Represents a bit mask indicating which GLONASS SVs
+     * were used for computing the most recent position fix.
+     */
+    uint32_t    glo_used_in_fix_mask;
+
+    /**
+     * Represents a bit mask indicating which BDS SVs
+     * were used for computing the most recent position fix.
+     */
+    uint64_t    bds_used_in_fix_mask;
+
+} GnssSvStatus;
 
 enum loc_sess_status {
     LOC_SESS_SUCCESS,

@@ -102,3 +102,7 @@ persist.timed.enable=true
 
 # Video
 vidc.enc.dcvs.extra-buff-count=2
+
+# Core control
+ro.min_freq_0=384000
+ro.min_freq_4=384000

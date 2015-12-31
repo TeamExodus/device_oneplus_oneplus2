@@ -573,19 +573,6 @@ service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
     disabled
     oneshot
 
-on property:init.svc.bootanim=running
-    write /sys/module/lpm_levels/system/a53/cpu0/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/cpu1/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/cpu2/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/cpu3/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu4/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu5/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu6/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu7/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/a57-l2-retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
-    write /sys/module/lpm_levels/parameters/sleep_disabled 0
-
 on property:init.svc.bootanim=stopped
     start usf-post-boot
 
@@ -953,12 +940,6 @@ on property:drmdiag.load=0
 service qcom-sh /system/bin/sh /init.qcom.sh
     class late_start
     user root
-    oneshot
-
-service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
-    class late_start
-    user root
-    disabled
     oneshot
 
 on property:sys.boot_completed=1

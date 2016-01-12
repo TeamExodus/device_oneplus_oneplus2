@@ -123,6 +123,9 @@ TARGET_LIBINIT_DEFINES_FILE := device/oneplus/oneplus2/init/init_oneplus2.cpp
 # Keymaster app checking
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
+# Cpusets
+ENABLE_CPUSETS := true
+
 # RIL
 TARGET_RIL_VARIANT := caf
 

@@ -48,6 +48,7 @@ import android.provider.Settings.Global;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
+import android.widget.Toast;
 
 import cyanogenmod.providers.CMSettings;
 
@@ -103,6 +104,7 @@ public class KeyHandler implements DeviceKeyHandler {
     private int mProximityTimeOut;
     private boolean mProximityWakeSupported;
     private NotificationManager mNotificationManager;
+    private Toast mZenToast;
 
     private boolean mNotificationSliderVibrate;
 
@@ -232,10 +234,24 @@ public class KeyHandler implements DeviceKeyHandler {
             case MODE_DO_NOT_DISTURB:
             case MODE_NORMAL:
                 int zenMode = Global.ZEN_MODE_OFF;
-                if (scanCode == MODE_MUTE) {
+                String message = null;
+                if (mZenToast != null) {
+                    mZenToast.cancel();
+                }
+                if (scanCode == MODE_NORMAL) {
+                    message = mContext.getString(com.android.internal.R.
+                            string.zen_mode_normal_toast);
+                    mZenToast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                } else if (scanCode == MODE_MUTE) {
                     zenMode = Global.ZEN_MODE_NO_INTERRUPTIONS;
+                    message = mContext.getString(com.android.internal.R.
+                            string.zen_mode_no_interruptions_toast);
+                    mZenToast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                 } else if (scanCode == MODE_DO_NOT_DISTURB) {
                     zenMode = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
+                    message = mContext.getString(com.android.internal.R.
+                            string.zen_mode_important_interruptions_toast);
+                    mZenToast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                 }
                 mNotificationManager.setZenMode(zenMode, null, null);
                 if (mNotificationSliderVibrate) {

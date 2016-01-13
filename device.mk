@@ -46,6 +46,7 @@ PRODUCT_PACKAGES += \
     ueventd.qcom.rc
 
 PRODUCT_PACKAGES += \
+    init.qcom.early_boot.sh \
     init.qcom.bt.sh
 
 # Permissions

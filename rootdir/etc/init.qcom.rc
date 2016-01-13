@@ -198,6 +198,8 @@ on post-fs-data
     mkdir -p /data/misc/sensors
     chmod -h 775 /data/misc/sensors
 
+    exec u:r:qti_init_shell:s0 -- /init.qcom.early_boot.sh
+
     setprop vold.post_fs_data_done 1
 
 on early-boot

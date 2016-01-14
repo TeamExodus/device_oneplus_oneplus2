@@ -1,4 +1,40 @@
 on enable-low-power
+    write /proc/sys/kernel/sched_boost 1
+
+    # HMP scheduler load tracking settings
+    write /proc/sys/kernel/sched_window_stats_policy 3
+    write /proc/sys/kernel/sched_ravg_hist_size 3
+
+    # HMP Background migration
+    write /proc/sys/kernel/sched_small_task 60
+
+    write /sys/devices/system/cpu/cpu0/sched_mostly_idle_load 60
+    write /sys/devices/system/cpu/cpu1/sched_mostly_idle_load 60
+    write /sys/devices/system/cpu/cpu2/sched_mostly_idle_load 60
+    write /sys/devices/system/cpu/cpu3/sched_mostly_idle_load 60
+    write /sys/devices/system/cpu/cpu4/sched_mostly_idle_load 20
+    write /sys/devices/system/cpu/cpu5/sched_mostly_idle_load 20
+    write /sys/devices/system/cpu/cpu6/sched_mostly_idle_load 20
+    write /sys/devices/system/cpu/cpu7/sched_mostly_idle_load 20
+
+    write /sys/devices/system/cpu/cpu0/sched_mostly_idle_nr_run 5
+    write /sys/devices/system/cpu/cpu1/sched_mostly_idle_nr_run 5
+    write /sys/devices/system/cpu/cpu2/sched_mostly_idle_nr_run 5
+    write /sys/devices/system/cpu/cpu3/sched_mostly_idle_nr_run 5
+    write /sys/devices/system/cpu/cpu4/sched_mostly_idle_nr_run 3
+    write /sys/devices/system/cpu/cpu5/sched_mostly_idle_nr_run 3
+    write /sys/devices/system/cpu/cpu6/sched_mostly_idle_nr_run 3
+    write /sys/devices/system/cpu/cpu7/sched_mostly_idle_nr_run 3
+
+    write /sys/devices/system/cpu/cpu0/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu1/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu2/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu3/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu4/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu5/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu6/sched_prefer_idle 0
+    write /sys/devices/system/cpu/cpu7/sched_prefer_idle 0
+
     # Disable retention
     write /sys/module/lpm_levels/system/a53/cpu0/retention/idle_enabled 0
     write /sys/module/lpm_levels/system/a53/cpu1/retention/idle_enabled 0
@@ -32,7 +68,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 95
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 50000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 30000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1248000
 
     # Disable io_is_busy
@@ -83,7 +119,7 @@ on enable-low-power
 
     # configure core_ctl module parameters
     write /sys/devices/system/cpu/cpu0/core_ctl/max_cpus 4
-    write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 1
+    write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 70
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres 20
     write /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms  100
@@ -99,15 +135,14 @@ on enable-low-power
 
     # Setting b.L scheduler parameters
     write /proc/sys/kernel/sched_migration_fixup 1
-    write /proc/sys/kernel/sched_small_task 30
-    write /proc/sys/kernel/sched_mostly_idle_load 20
-    write /proc/sys/kernel/sched_mostly_idle_nr_run 3
-    write /proc/sys/kernel/sched_upmigrate 99
-    write /proc/sys/kernel/sched_downmigrate 85
-    write /proc/sys/kernel/sched_freq_inc_notify 400000
-    write /proc/sys/kernel/sched_freq_dec_notify 400000
+    write /proc/sys/kernel/sched_upmigrate 93
+    write /proc/sys/kernel/sched_downmigrate 83
+    write /proc/sys/kernel/sched_freq_inc_notify 50000
+    write /proc/sys/kernel/sched_freq_dec_notify 50000
 
-    #enable rps static configuration
+    # Enable rps static configuration
+    write /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus 8
+    write /sys/class/net/rmnet_data0/queues/rx-0/rps_cpus 10
     write /sys/class/devfreq/qcom,cpubw.33/governor "bw_hwmon"
     write /sys/class/devfreq/qcom,gpubw.72/governor "bw_hwmon"
     write /sys/class/devfreq/qcom,mincpubw.34/governor "cpufreq"

@@ -29,192 +29,150 @@ import init.qcom.power.rc
 import init.qcom.usb.rc
 
 on early-init
+    mkdir /firmware 0771 system system
+    mkdir /bt_firmware 0771 system system
+    mkdir /system 0777 root root
     symlink /data/tombstones /tombstones
     mount debugfs debugfs /sys/kernel/debug
-
-on early-fs
-    mount_all /fstab.qcom
 
 on init
     export LD_SHIM_LIBS "/system/lib/hw/camera.msm8994.so|libcamera_shim.so:/system/vendor/lib/libmmqjpeg_codec.so|libboringssl-compat.so"
 
-    mkdir /firmware 0771 system system
-    mkdir /bt_firmware 0771 system system
-    mkdir /persist 0771 system system
     chmod 0644 /proc/cmdline
 
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
-    # Slow Motion Scheduling Group
-    mkdir /dev/cpuctl/smsg
-    chown system system /dev/cpuctl/smsg/tasks
-    chmod 0666 /dev/cpuctl/smsg/tasks
-    write /dev/cpuctl/smsg/cpu.shares 52
-    write /dev/cpuctl/smsg/cpu.cfs_period_us 33333
-    write /dev/cpuctl/smsg/cpu.cfs_quota_us 47408
-    write /dev/cpuctl/smsg/cpu.cfs_quota_us_per_task 5926
-    write /dev/cpuctl/smsg/cpu.upmigrate_discourage 1
+on fs
+    mount_all fstab.qcom
 
-    # Add for fpc fingerprints permission
-    chmod -h 777 /dev/qseecom
-    chown system system /dev/fpc1020
-    chmod 0660 /dev/fpc1020
+    # Set permissions for persist partition
+    mkdir /persist 0771 system system
+    mkdir /persist/data 0700 system system
 
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
-    chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
-    chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
+    restorecon_recursive /persist
 
-    # Laser AF in factory mode
-    chown system system /dev/stmvl6180_ranging
+on post-fs-data
+    mkdir /data/tombstones 0771 system system
+    mkdir /tombstones/modem 0771 system system
+    mkdir /tombstones/lpass 0771 system system
+    mkdir /tombstones/wcnss 0771 system system
+    mkdir /tombstones/dsps 0771 system system
+    mkdir /persist/data/sfs 0700 system system
+    mkdir /persist/data/tz 0700 system system
+    mkdir /data/misc/sfs/sfs 0700 system system
+    mkdir /data/misc/sfs/tz 0700 system system
+    mkdir /data/misc/dts 0770 media audio
+    mkdir /data/misc/fp 0700 system system
+    mkdir /data/oemnvitems 0771 radio radio
 
-    # Leds permission
-    chown system system /sys/class/leds/led:flash_0/brightness
-    chown system system /sys/class/leds/led:flash_1/brightness
+    # Create directory for TZ Apps
+    mkdir /data/misc/qsee 0770 system system
 
-    # Torch
-    chown system system /sys/class/leds/led:torch_0/brightness
-    chmod 0666 /sys/class/leds/led:torch_0/brightness
-    chown system system /sys/class/leds/led:torch_1/brightness
-    chmod 0666 /sys/class/leds/led:torch_1/brightness
+    mkdir /data/media 0770 media_rw media_rw
+    chown media_rw media_rw /data/media
 
-    # Scheduler
-    chown system system /sys/module/cpu_boost/parameters/sysctl_thermal_aware_scheduling
+    mkdir /data/misc/ipa 0700 net_admin net_admin
+
+    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
+
+    # Create the directories used by the Wireless subsystem
+    mkdir /data/misc/wifi 0770 wifi wifi
+    mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
+    mkdir /data/misc/dhcp 0770 dhcp dhcp
+    chown dhcp dhcp /data/misc/dhcp
+
+     # Add for softap client
+    mkdir /data/misc/wifi/hostapd 0770 wifi wifi
+
+    # Create the directories used by CnE subsystem
+    mkdir /data/connectivity 0771 system system
+    chown system system /data/connectivity
+
+    # Create directory used by audio subsystem
+    mkdir /data/misc/audio 0770 audio audio
+
+    # Create directory for audio delta files
+    mkdir /data/misc/audio/acdbdata 0770 media audio
+    mkdir /data/misc/audio/acdbdata/delta 0770 media audio
+
+    # Create directory used by display clients
+    mkdir /data/misc/display 0770 system graphics
+    mkdir /persist/display 0770 system graphics
+
+    # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
+    # We chown/chmod /persist again so because mount is run as root + defaults
+    chown system system /persist
+    chmod 0771 /persist
+    chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.3/polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.4/polling
+
+    # Chown polling nodes as needed from UI running on system server
+    chown system system /sys/devices/platform/msm_sdcc.1/polling
+    chown system system /sys/devices/platform/msm_sdcc.2/polling
+    chown system system /sys/devices/platform/msm_sdcc.3/polling
+    chown system system /sys/devices/platform/msm_sdcc.4/polling
+
+    # Create the symlink to qcn wpa_supplicant folder for ar6000 wpa_supplicant
+    mkdir /data/system 0775 system system
+    #symlink /data/misc/wifi/wpa_supplicant /data/system/wpa_supplicant
+
+    # Create directories for Location services
+    mkdir /data/misc/location 0770 gps gps
+    mkdir /data/misc/location/mq 0770 gps gps
+    mkdir /data/misc/location/xtwifi 0770 gps gps
+    mkdir /data/misc/location/gpsone_d 0770 system gps
+    mkdir /data/misc/location/quipc 0770 gps system
+    mkdir /data/misc/location/gsiff 0770 gps gps
+
+    # Create directory from IMS services
+    mkdir /data/shared 0755
+    chown system system /data/shared
+
+    # Create directory for FOTA
+    mkdir /data/fota 0771
+    chown system system /data/fota
+
+    # Create directory for hostapd
+    mkdir /data/hostapd 0770 system wifi
+
+    # Create /data/time folder for time-services
+    mkdir /data/time/ 0700 system system
+
+    mkdir /data/audio/ 0770 media audio
+
+    # Create a folder for SRS to be able to create a usercfg file
+    mkdir /data/data/media 0770 media media
+
+    # Create folder for mm-qcamera-daemon
+    mkdir /data/camera 0770 media camera
+    mkdir /data/misc/camera 0770 camera camera
+
+    # Create PERFD deamon related dirs
+    mkdir /data/misc/perfd 0755 root system
+    chmod 2755 /data/misc/perfd
+    mkdir /data/system/perfd 0770 root system
+    chmod 2770 /data/system/perfd
+
+    # Touchscreen
+    chown system radio /proc/touchpanel/double_tap_enable
+    chmod 0660 /proc/touchpanel/double_tap_enable
+    chown system radio /proc/touchpanel/camera_enable
+    chmod 0660 /proc/touchpanel/camera_enable
+    chown system radio /proc/touchpanel/music_enable
+    chmod 0660 /proc/touchpanel/music_enable
+    chown system radio /proc/touchpanel/flashlight_enable
+    chmod 0660 /proc/touchpanel/flashlight_enable
 
     # Vibrator permissions
     chown system system /sys/devices/virtual/timed_output/vibrator/vmax_mv
     chmod 0644 /sys/devices/virtual/timed_output/vibrator/vmax_mv
 
-    # Display color calibration
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_hue
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_invert
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_min
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_sat
-    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_val
-
-    # Touchscreen
-    chown system radio /proc/touchpanel/double_tap_enable
-    chmod 0660 /proc/touchpanel/double_tap_enable
-
-    chown root system /proc/touchpanel/camera_enable
-    chmod 0660 /proc/touchpanel/camera_enable
-
-    chown root system /proc/touchpanel/music_enable
-    chmod 0660 /proc/touchpanel/music_enable
-
-    chown root system /proc/touchpanel/flashlight_enable
-    chmod 0660 /proc/touchpanel/flashlight_enable
-
-    # Buttons
-    chown root system /proc/s1302/key_rep
-    chmod 0660 /proc/s1302/key_rep
-
-    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_top
-    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_top
-
-    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_middle
-    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_middle
-
-    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_bottom
-    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_bottom
-
-    # PCC Calibration
-    chown system system /sys/devices/virtual/graphics/fb0/rgb
-    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
-
-    # for product mode flashlight
-    chown system system /proc/qcom_flash
-
-    # Modify for RGB light support
-    chown system system /sys/class/leds/red/pause_lo
-    chown system system /sys/class/leds/blue/pause_lo
-    chown system system /sys/class/leds/green/pause_lo
-
-    chown system system /sys/class/leds/red/pause_hi
-    chown system system /sys/class/leds/blue/pause_hi
-    chown system system /sys/class/leds/green/pause_hi
-
-    chown system system /sys/class/leds/red/blink
-    chown system system /sys/class/leds/blue/blink
-    chown system system /sys/class/leds/green/blink
-
-    # Modify for RGB breath effect control support
-    chown system system /sys/class/leds/red/ramp_step_ms
-    chown system system /sys/class/leds/blue/ramp_step_ms
-    chown system system /sys/class/leds/green/ramp_step_ms
-
-    chown system system /sys/class/leds/red/duty_pcts
-    chown system system /sys/class/leds/blue/duty_pcts
-    chown system system /sys/class/leds/green/duty_pcts
-
-    chmod 660 /sys/class/leds/red/ramp_step_ms
-    chmod 660 /sys/class/leds/green/ramp_step_ms
-    chmod 660 /sys/class/leds/blue/ramp_step_ms
-
-    chmod 660 /sys/class/leds/red/duty_pcts
-    chmod 660 /sys/class/leds/green/duty_pcts
-    chmod 660 /sys/class/leds/blue/duty_pcts
-
-    # Add for enginerr app for sys/class selinux recon
-    restorecon /sys/class/leds/keyboard-backlight/brightness
-    restorecon /sys/class/leds/button-backlight/brightness
-    restorecon /sys/class/leds/red/brightness
-    restorecon /sys/class/leds/green/brightness
-    restorecon /sys/class/leds/blue/brightness
-    restorecon /sys/class/leds/red/blink
-    restorecon /sys/class/leds/green/blink
-    restorecon /sys/class/leds/blue/blink
-
-    # Enable cgroup_freezer
-    mkdir /sys/fs/cgroup/freezer 0750 root system
-    mount cgroup none /sys/fs/cgroup/freezer  freezer
-    chmod 777 /sys/fs/cgroup/freezer
-
-    # Wifi ftm test
-    chown system system /system/bin/wifi_ftm
-    chmod 0777  /system/bin/wifi_ftm
-    chown system system /system/bin/wifi_single
-    chmod 0777  /system/bin/wifi_single
-    chown system system /system/bin/iwpriv
-    chmod 0777  /system/bin/iwpriv
-    chown system system /system/bin/iwlist
-    chmod 0777  /system/bin/iwlist
-    chown system system /system/xbin/tcpdump
-    chmod 0777  /system/xbin/tcpdump
-
-    write /sys/module/printk/parameters/print_wall_time 1
-
-    # Access permission for secure touch
-    chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
-    chmod 0440 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch
-    chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch_enable
-    chmod 0440 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch
-    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
-    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch
-    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch_enable
-    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch
-    write /proc/sys/kernel/sched_boost 1
-    write /proc/sys/vm/dirty_ratio 15
-    write /proc/sys/vm/dirty_background_ratio 1
-
-    # Modify for drv2605 support
-    chmod 0666 /dev/drv2605
-    chown system system /dev/drv2605
+    setprop vold.post_fs_data_done 1
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -225,6 +183,7 @@ on early-boot
 on boot
     start rmt_storage
     start rfs_access
+    start sensors
 
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/type
@@ -264,8 +223,6 @@ on boot
     # Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
-
-    setprop net.tcp.2g_init_rwnd 10
 
     # Assign TCP buffer thresholds to be ceiling value of technology maximums
     # Increased technology maximums should be reflected here.
@@ -337,126 +294,171 @@ on boot
     chown radio radio /data/misc/radio/copy_complete
     chmod 0660 /data/misc/radio/copy_complete
 
-# msm specific files that need to be created on /data
-on post-fs-data
-    mkdir /data/tombstones 0771 system system
-    mkdir /tombstones/modem 0771 system system
-    mkdir /tombstones/lpass 0771 system system
-    mkdir /tombstones/wcnss 0771 system system
-    mkdir /tombstones/dsps 0771 system system
-    mkdir /persist/data/sfs 0700 system system
-    mkdir /persist/data/tz 0700 system system
-    mkdir /data/misc/sfs/sfs 0700 system system
-    mkdir /data/misc/sfs/tz 0700 system system
-    mkdir /data/misc/dts 0770 media audio
-    mkdir /data/misc/fp 0700 system system
-    mkdir /data/oemnvitems 0771 radio radio
+    # Sensors
+    mkdir /persist/sensors
+    chmod 0775 /persist/sensors
+    chmod 0664 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
+    chmod 0664 /persist/sensors/gyro_sensitity_cal
+    chown system root /persist/sensors/gyro_sensitity_cal
+    mkdir /data/misc/sensors
+    chmod 0775 /data/misc/sensors
 
-    # Create directory for TZ Apps
-    mkdir /data/misc/qsee 0770 system system
+    # Add for fpc fingerprints permission
+    chmod -h 777 /dev/qseecom
+    chown system system /dev/fpc1020
+    chmod 0660 /dev/fpc1020
 
-    # We will remap this as /mnt/sdcard with the sdcard fuse tool
-    mkdir /data/misc/camera 0770 camera camera
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
+    chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
+    chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
 
-    # Create folder for mm-qcamera-daemon
-    mkdir /data/camera 0770 media camera
+    # Scheduler
+    chown system system /sys/module/cpu_boost/parameters/sysctl_thermal_aware_scheduling
 
-    mkdir /data/misc/ipa 0700 net_admin net_admin
+    # Display color calibration
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_hue
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_invert
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_min
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_sat
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_val
 
-    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
+    # Buttons
+    chown root system /proc/s1302/key_rep
+    chmod 0660 /proc/s1302/key_rep
 
-    # Create the directories used by the Wireless subsystem
-    mkdir /data/misc/wifi 0770 wifi wifi
-    mkdir /data/misc/wifi/sockets 0770 wifi wifi
-    mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
-    mkdir /data/misc/dhcp 0770 dhcp dhcp
-    chown dhcp dhcp /data/misc/dhcp
+    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_top
+    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_top
 
-    # Create the directories used by CnE subsystem
-    mkdir /data/connectivity 0771 system system
-    chown system system /data/connectivity
+    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_middle
+    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_middle
 
-    # Create the directories used by DPM subsystem
-    mkdir /data/dpm 0771 system system
-    chown system system /data/dpm
+    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_bottom
+    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_bottom
 
-    mkdir /data/dpm/fdMgr 0771 system system
-    chown system system /data/dpm/fdMgr
+    # PCC Calibration
+    chown system system /sys/devices/virtual/graphics/fb0/rgb
+    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
 
-    mkdir /data/dpm/nsrm 0771 system system
-    chown system system /data/dpm/nsrm
+    # Modify for RGB light support
+    chown system system /sys/class/leds/red/pause_lo
+    chown system system /sys/class/leds/blue/pause_lo
+    chown system system /sys/class/leds/green/pause_lo
 
-    # Create directory used by audio subsystem
-    mkdir /data/misc/audio 0770 audio audio
+    chown system system /sys/class/leds/red/pause_hi
+    chown system system /sys/class/leds/blue/pause_hi
+    chown system system /sys/class/leds/green/pause_hi
 
-    # Create directory for audio delta files
-    mkdir /data/misc/audio/acdbdata 0770 media audio
-    mkdir /data/misc/audio/acdbdata/delta 0770 media audio
+    chown system system /sys/class/leds/red/blink
+    chown system system /sys/class/leds/blue/blink
+    chown system system /sys/class/leds/green/blink
 
-    # Create directory used by the DASH client
-    mkdir /data/misc/dash 0770 media audio
+    # Modify for RGB breath effect control support
+    chown system system /sys/class/leds/red/ramp_step_ms
+    chown system system /sys/class/leds/blue/ramp_step_ms
+    chown system system /sys/class/leds/green/ramp_step_ms
 
-    # Create directory used by display clients
-    mkdir /data/misc/display 0770 system graphics
-    mkdir /persist/display 0770 system graphics
+    chown system system /sys/class/leds/red/duty_pcts
+    chown system system /sys/class/leds/blue/duty_pcts
+    chown system system /sys/class/leds/green/duty_pcts
 
-    # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
-    # We chown/chmod /persist again so because mount is run as root + defaults
-    chown system system /persist
-    chmod 0771 /persist
-    chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
-    chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
-    chmod 0664 /sys/devices/platform/msm_sdcc.3/polling
-    chmod 0664 /sys/devices/platform/msm_sdcc.4/polling
+    chmod 660 /sys/class/leds/red/ramp_step_ms
+    chmod 660 /sys/class/leds/green/ramp_step_ms
+    chmod 660 /sys/class/leds/blue/ramp_step_ms
 
-    # Chown polling nodes as needed from UI running on system server
-    chown system system /sys/devices/platform/msm_sdcc.1/polling
-    chown system system /sys/devices/platform/msm_sdcc.2/polling
-    chown system system /sys/devices/platform/msm_sdcc.3/polling
-    chown system system /sys/devices/platform/msm_sdcc.4/polling
+    chmod 660 /sys/class/leds/red/duty_pcts
+    chmod 660 /sys/class/leds/green/duty_pcts
+    chmod 660 /sys/class/leds/blue/duty_pcts
 
-    # Create the symlink to qcn wpa_supplicant folder for ar6000 wpa_supplicant
-    mkdir /data/system 0775 system system
-    #symlink /data/misc/wifi/wpa_supplicant /data/system/wpa_supplicant
+    # Add for enginerr app for sys/class selinux recon
+    restorecon /sys/class/leds/button-backlight/brightness
+    restorecon /sys/class/leds/red/brightness
+    restorecon /sys/class/leds/green/brightness
+    restorecon /sys/class/leds/blue/brightness
+    restorecon /sys/class/leds/red/blink
+    restorecon /sys/class/leds/green/blink
+    restorecon /sys/class/leds/blue/blink
 
-    # Create directories for Location services
-    mkdir /data/misc/location 0770 gps gps
-    mkdir /data/misc/location/mq 0770 gps gps
-    mkdir /data/misc/location/xtwifi 0770 gps gps
-    mkdir /data/misc/location/gpsone_d 0770 system gps
-    mkdir /data/misc/location/quipc 0770 gps system
-    mkdir /data/misc/location/gsiff 0770 gps gps
+    # Enable cgroup_freezer
+    mkdir /sys/fs/cgroup/freezer 0750 root system
+    mount cgroup none /sys/fs/cgroup/freezer  freezer
+    chmod 777 /sys/fs/cgroup/freezer
 
-    # Create directory from IMS services
-    mkdir /data/shared 0755
-    chown system system /data/shared
+    # Wifi ftm test
+    chown system system /system/bin/wifi_ftm
+    chmod 0777  /system/bin/wifi_ftm
+    chown system system /system/bin/wifi_single
+    chmod 0777  /system/bin/wifi_single
+    chown system system /system/bin/iwpriv
+    chmod 0777  /system/bin/iwpriv
+    chown system system /system/bin/iwlist
+    chmod 0777  /system/bin/iwlist
+    chown system system /system/xbin/tcpdump
+    chmod 0777  /system/xbin/tcpdump
 
-    # Create directory for FOTA
-    mkdir /data/fota 0771
-    chown system system /data/fota
+    write /sys/module/printk/parameters/print_wall_time 1
 
-    # Create directory for hostapd
-    mkdir /data/hostapd 0770 system wifi
+    # Access permission for secure touch
+    chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
+    chmod 0440 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch
+    chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch_enable
+    chmod 0440 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch
+    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
+    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch
+    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch_enable
+    chown system drmrpc /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch
+    write /proc/sys/vm/dirty_ratio 15
+    write /proc/sys/vm/dirty_background_ratio 1
 
-    # Create /data/time folder for time-services
-    mkdir /data/time/ 0700 system system
+    # Modify for drv2605 support
+    chmod 0666 /dev/drv2605
+    chown system system /dev/drv2605
 
-    mkdir /data/audio/ 0770 media audio
+    # Laser AF in factory mode
+    chown system system /dev/stmvl6180_ranging
 
-    # Create a folder for audio delta files
-    mkdir /data/audio/acdbdata 0770 media audio
-    mkdir /data/audio/acdbdata/delta 0770 media audio
+    # for product mode flashlight
+    chown system system /proc/qcom_flash
 
-    setprop vold.post_fs_data_done 1
+    # Leds permission
+    chown system system /sys/class/leds/led:flash_0/brightness
+    chown system system /sys/class/leds/led:flash_1/brightness
 
-    # Create a folder for SRS to be able to create a usercfg file
-    mkdir /data/data/media 0770 media media
+    # Torch
+    chown system system /sys/class/leds/led:torch_0/brightness
+    chmod 0666 /sys/class/leds/led:torch_0/brightness
+    chown system system /sys/class/leds/led:torch_1/brightness
+    chmod 0666 /sys/class/leds/led:torch_1/brightness
 
-    # Create PERFD deamon related dirs
-    mkdir /data/misc/perfd 0755 root system
-    chmod 2755 /data/misc/perfd
-    mkdir /data/system/perfd 0770 root system
-    chmod 2770 /data/system/perfd
+    # Charger
+    chown root system /sys/class/power_supply/bms/current_now
+    chown root system /sys/class/power_supply/bms/voltage_ocv
+    chown root system /sys/class/power_supply/battery/input_current_max
+    chown root system /sys/class/power_supply/battery/input_current_trim
+    chown root system /sys/class/power_supply/battery/input_current_settled
+    chown root system /sys/class/power_supply/battery/voltage_min
+    chmod 0664 /sys/class/power_supply/bms/current_now
+    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
+    chmod 0664 /sys/class/power_supply/battery/input_current_max
+    chmod 0664 /sys/class/power_supply/battery/input_current_trim
+    chmod 0664 /sys/class/power_supply/battery/input_current_settled
+    chmod 0664 /sys/class/power_supply/battery/voltage_min
+
+# Services start here
 
 # start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
@@ -545,9 +547,6 @@ on property:persist.debug.trace=1
     write /sys/bus/coresight/devices/coresight-etm3/enable 1
     write /sys/module/coresight_event/parameters/event_abort_enable 1
 
-on property:init.svc.wpa_supplicant=stopped
-    stop dhcpcd
-
 on property:bluetooth.isEnabled=true
     write /sys/class/bluetooth/hci0/idle_timeout 7000
 
@@ -578,10 +577,6 @@ on property:vold.decrypt=trigger_restart_framework
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
-
-service cnd /system/bin/cnd
-    class late_start
-    socket cnd stream 660 root inet
 
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
@@ -679,11 +674,10 @@ service qmuxd /system/bin/qmuxd
     class main
     user root
     group radio audio bluetooth gps nfc qcom_diag
-    disabled
 
 service netmgrd /system/bin/netmgrd
     class main
-    disabled
+    group radio
 
 service qti /system/vendor/bin/qti
     class main
@@ -727,17 +721,13 @@ service amp_unload /system/bin/amploader -u
     disabled
     oneshot
 
+# WPA
 service p2p_supplicant /system/bin/wpa_supplicant \
-    -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
-    -I/system/etc/wifi/p2p_supplicant_overlay.conf -N \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -puse_p2p_group_interface=1 \
+    -I/system/etc/wifi/p2p_supplicant_overlay.conf \
+    -puse_p2p_group_interface=1p2p_device=1 \
+    -m/data/misc/wifi/p2p_supplicant.conf \
     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
-    # we will start as root and wpa_supplicant will switch to user wifi
-    # after setting up the capabilities required for WEXT
-    # user wifi
-    # group wifi inet keystore
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
@@ -747,14 +737,13 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
-    # we will start as root and wpa_supplicant will switch to user wifi
-    # after setting up the capabilities required for WEXT
-    # user wifi
-    # group wifi inet keystore
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
+
+on property:init.svc.wpa_supplicant=stopped
+    stop dhcpcd
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -ABKLG
     class late_start
@@ -819,12 +808,10 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
-service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
+service loc_launcher /system/bin/loc_launcher
+    #loc_launcher will start as root and set its uid to gps
     class late_start
-    user root
-    group system
-    disabled
-    oneshot
+    group gps inet net_raw qcom_diag net_admin wifi
 
 service drmdiag /system/bin/drmdiagapp
     class late_start
@@ -837,14 +824,6 @@ on property:drmdiag.load=1
 
 on property:drmdiag.load=0
     stop drmdiag
-
-service qcom-sh /system/bin/sh /init.qcom.sh
-    class late_start
-    user root
-    oneshot
-
-on property:sys.boot_completed=1
-    start qcom-post-boot
 
 service hostapd /system/bin/hostapd /data/hostapd/hostapd.conf
     class late_start
@@ -865,33 +844,12 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service battery_monitor /system/bin/battery_monitor
-    user system
-    group system
-    disabled
-
 service ril-daemon2 /system/bin/rild -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
     user root
-    disabled
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
-
-service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
-    class late_start
-    user root
-    group root
-    oneshot
-
-service profiler_daemon /system/bin/profiler_daemon
-    class late_start
-    user root
-    group root
-    disabled
-
-service charger /charger
-    class charger
 
 service ssr_diag /system/bin/ssr_diag
     class late_start
@@ -910,25 +868,24 @@ on property:persist.usb.hvdcp.detect=true
 on property:persist.usb.hvdcp.detect=false
     stop hvdcp
 
-service charger_monitor /system/bin/charger_monitor
+service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
+    socket msm_irqbalance seqpacket 660 root system
+    class core
     user root
     group root
-    disabled
+    writepid /dev/cpuset/system-background/tasks
+
+service charger /charger
+    class charger
+    seclabel u:r:healthd:s0
 
 service qbcharger /charger -m 1
     disabled
     oneshot
+    seclabel u:r:healthd:s0
 
 on property:sys.qbcharger.enable=true
     start qbcharger
 
 on property:sys.qbcharger.enable=false
     stop qbcharger
-
-service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
-    socket msm_irqbalance seqpacket 660 root system
-    class core
-    user root
-    group root
-    disabled
-    writepid /dev/cpuset/system-background/tasks

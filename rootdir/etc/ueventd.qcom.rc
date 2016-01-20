@@ -45,8 +45,6 @@
 /dev/ipa                  0660   net_admin  net_admin
 /dev/wwan_ioctl           0660   net_admin  net_admin
 /dev/ipaNatTable          0660   net_admin  net_admin
-/dev/rmnet_ctrl           0660   usb        usb
-/dev/dpl_ctrl             0660   usb        usb
 
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
@@ -106,9 +104,7 @@
 /dev/video*               0660   system     camera
 /dev/media*               0660   system     camera
 /dev/v4l-subdev*          0660   system     camera
-#changhua.li modify from 660 to 666 for alipay use tz
-/dev/qseecom              0666   system     drmrpc
-/dev/seemplog             0660   system     system
+/dev/qseecom              0660   system     drmrpc
 /dev/pft                  0660   system     drmrpc
 /dev/gemini0              0660   system     camera
 /dev/jpeg0                0660   system     camera
@@ -154,7 +150,6 @@
 /dev/msm_preproc_ctl      0660   system     audio
 /dev/msm_rtac             0660   system     audio
 /dev/msm_voicememo        0660   system     audio
-/dev/radio0               0640   fm_radio   fm_radio
 /dev/smd3                 0660   bluetooth  net_bt_stack
 /dev/smd2                 0660   bluetooth  net_bt_stack
 /dev/ttyHSL1              0660   system     system
@@ -199,6 +194,14 @@
 /sys/devices/virtual/optical_sensors/lightsensor    ls_poll_delay  0660    input    system
 /sys/devices/virtual/input/input*                   poll           0660    input    system
 /sys/devices/virtual/input/input*                   pollrate_ms    0660    input    system
+
+# vm_bms
+/dev/vm_bms               0660   system     system
+/dev/battery_data         0660   system     system
+
+# wlan
+/dev/wcnss_wlan           0660   system     system
+/dev/wcnss_ctrl           0660   system     system
 
 # UIO devices
 /dev/uio0                 0660   system     system

@@ -141,20 +141,23 @@ on enable-low-power
 
     # Setting b.L scheduler parameters
     write /proc/sys/kernel/sched_migration_fixup 1
-    write /proc/sys/kernel/sched_upmigrate 93
-    write /proc/sys/kernel/sched_downmigrate 83
-    write /proc/sys/kernel/sched_freq_inc_notify 50000
-    write /proc/sys/kernel/sched_freq_dec_notify 50000
+    write /proc/sys/kernel/sched_upmigrate 95
+    write /proc/sys/kernel/sched_downmigrate 85
+    write /proc/sys/kernel/sched_freq_inc_notify 400000
+    write /proc/sys/kernel/sched_freq_dec_notify 400000
 
     # Enable rps static configuration
     write /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus 8
-    write /sys/class/net/rmnet_data0/queues/rx-0/rps_cpus 10
     write /sys/class/devfreq/qcom,cpubw.33/governor "bw_hwmon"
     write /sys/class/devfreq/qcom,gpubw.72/governor "bw_hwmon"
     write /sys/class/devfreq/qcom,mincpubw.34/governor "cpufreq"
 
     rm /data/system/perfd/default_values
     start perfd
+
+on charger
+    write /sys/module/lpm_levels/parameters/sleep_disabled 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
 
 on class_start:late_start
     trigger enable-low-power

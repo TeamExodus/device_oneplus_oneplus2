@@ -48,24 +48,25 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     audio.offload.video=true \
+    audio.offload.pcm.16bit.enable=true \
+    audio.offload.pcm.24bit.enable=true \
+    audio.offload.multiple.enabled=true \
+    audio.offload.gapless.enabled=true \
+    audio.offload.passthrough=false \
+    audio.offload.buffer.size.kb=1024 \
+    audio.dolby.ds2.enabled=true \
+    audio.dolby.ds2.hardbypass=true \
+    audio.deep_buffer.media=true \
+    av.streaming.offload.enable=true \
     persist.audio.fluence.voicecall=true \
     persist.audio.fluence.voicerec=false \
     persist.audio.fluence.speaker=true \
     ro.qc.sdk.audio.fluencetype=fluence \
     ro.qc.sdk.audio.ssr=false \
     media.aac_51_output_enabled=true \
-    audio.offload.pcm.16bit.enable=true \
-    audio.offload.pcm.24bit.enable=true \
     use.voice.path.for.pcm.voip=true \
-    audio.offload.multiple.enabled=true \
-    audio.offload.gapless.enabled=true \
     mm.enable.smoothstreaming=true \
-    audio.offload.buffer.size.kb=1024 \
-    audio.dolby.ds2.enabled=true \
-    audio.dolby.ds2.hardbypass=true \
-    audio.offload.passthrough=false \
-    persist.dpm.feature=1 \
-    audio.deep_buffer.media=true
+    persist.dpm.feature=1
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \

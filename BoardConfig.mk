@@ -134,6 +134,9 @@ TARGET_NO_RPC := true
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
 
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
+
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
 BOARD_HAS_QCOM_WLAN_SDK := true

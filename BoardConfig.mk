@@ -50,6 +50,9 @@ TARGET_2ND_CPU_VARIANT := generic
 
 TARGET_USES_64_BIT_BINDER := true
 
+# Cpusets
+ENABLE_CPUSETS := true
+
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-7
 BOARD_KERNEL_BASE := 0x00000000
@@ -65,9 +68,6 @@ TARGET_KERNEL_SOURCE := kernel/oneplus/msm8994
 TARGET_KERNEL_CONFIG := cm_oneplus2_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 TARGET_USES_UNCOMPRESSED_KERNEL := true
-
-# QCOM hardware
-BOARD_USES_QCOM_HARDWARE := true
 
 # Audio
 AUDIO_FEATURE_ENABLED_ACDB_LICENSE := true
@@ -87,12 +87,6 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oneplus/oneplus2/bluetooth
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
-# Charger
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
-
-# Font
-EXTENDED_FONT_FOOTPRINT := true
-
 # GPS
 USE_DEVICE_SPECIFIC_GPS := true
 USE_DEVICE_SPECIFIC_LOC_API := true
@@ -100,7 +94,7 @@ USE_DEVICE_SPECIFIC_LOC_API := true
 # Graphics
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_USES_ION := true
-TARGET_USES_NEW_ION_API :=true
+TARGET_USES_NEW_ION_API := true
 TARGET_USES_C2D_COMPOSITION := true
 USE_OPENGL_RENDERER := true
 
@@ -109,6 +103,12 @@ MAX_EGL_CACHE_SIZE := 2048*1024
 
 HAVE_ADRENO_SOURCE:= false
 OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
+
+# Charger
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+
+# Font
+EXTENDED_FONT_FOOTPRINT := true
 
 # Include path
 TARGET_SPECIFIC_HEADER_PATH := device/oneplus/oneplus2/include
@@ -122,16 +122,14 @@ TARGET_LIBINIT_DEFINES_FILE := device/oneplus/oneplus2/init/init_oneplus2.cpp
 # Keymaster app checking
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
-# Cpusets
-ENABLE_CPUSETS := true
-
 # RIL
 TARGET_RIL_VARIANT := caf
 
 # RPC
 TARGET_NO_RPC := true
 
-# Time services
+# QCOM hardware
+BOARD_USES_QCOM_HARDWARE := true
 BOARD_USES_QC_TIME_SERVICES := true
 
 # ANT+

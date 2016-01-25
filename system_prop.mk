@@ -3,8 +3,8 @@
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.product=OnePlus2 \
     ro.product.device=OnePlus2 \
-    ro.build.description=OnePlus2-user 5.1.1 LMY47V 21 dev-keys \
-    ro.build.fingerprint=OnePlus/OnePlus2/OnePlus2:5.1.1/LMY47V/1436933040:user/release-keys
+    ro.build.description=OnePlus2-user 5.1.1 LMY47V 25 dev-keys \
+    ro.build.fingerprint=OnePlus/OnePlus2/OnePlus2:5.1.1/LMY47V/1436933050:user/release-keys
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \

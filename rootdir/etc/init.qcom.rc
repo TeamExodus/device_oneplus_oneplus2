@@ -526,6 +526,9 @@ service energy-awareness /system/bin/energy-awareness
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
 
+    # Temp hack to fix torch not being registered on boot
+    restart media
+
 # corefile limit and ETB enabling
 on property:persist.debug.trace=1
     mkdir /data/core 0777 root root

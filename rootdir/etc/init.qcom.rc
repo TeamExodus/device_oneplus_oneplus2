@@ -324,9 +324,6 @@ on boot
     chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
     chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
 
-    # Scheduler
-    chown system system /sys/module/cpu_boost/parameters/sysctl_thermal_aware_scheduling
-
     # Display color calibration
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable

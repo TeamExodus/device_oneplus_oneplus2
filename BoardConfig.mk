@@ -102,6 +102,7 @@ OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BOARD_HEALTHD_CUSTOM_CHARGER_RES := oneplus/oneplus2/charger/images
 
 # Font
 EXTENDED_FONT_FOOTPRINT := true

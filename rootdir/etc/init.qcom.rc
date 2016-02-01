@@ -36,8 +36,6 @@ on early-init
     mount debugfs debugfs /sys/kernel/debug
 
 on init
-    export LD_SHIM_LIBS "/system/lib/hw/camera.msm8994.so|libcamera_shim.so:/system/vendor/lib/libmmqjpeg_codec.so|libboringssl-compat.so"
-
     chmod 0644 /proc/cmdline
 
     # Support legacy paths
@@ -522,9 +520,6 @@ service energy-awareness /system/bin/energy-awareness
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
-
-    # Temp hack to fix torch not being registered on boot
-    restart media
 
 # corefile limit and ETB enabling
 on property:persist.debug.trace=1

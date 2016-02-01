@@ -119,8 +119,7 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    libboringssl-compat \
-    libcamera_shim \
+    mm-qcamera-app \
     libstlport \
     Snap
 

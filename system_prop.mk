@@ -50,7 +50,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     audio.dolby.ds2.enabled=true \
     audio.dolby.ds2.hardbypass=true \
     audio.offload.passthrough=false \
-    persist.dpm.feature=1
+    persist.dpm.feature=1 \
+    audio.deep_buffer.media=true
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \

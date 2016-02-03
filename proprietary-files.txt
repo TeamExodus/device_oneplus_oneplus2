@@ -224,16 +224,16 @@ vendor/lib/drm/libdrmwvmplugin.so
 vendor/lib/mediadrm/libwvdrmengine.so
 
 # Fingerprint
-etc/firmware/alipay.b00
-etc/firmware/alipay.b01
-etc/firmware/alipay.b02
-etc/firmware/alipay.b03
-etc/firmware/alipay.mdt
+bin/fingerprintd
 etc/firmware/fingerprints.b00
 etc/firmware/fingerprints.b01
 etc/firmware/fingerprints.b02
 etc/firmware/fingerprints.b03
 etc/firmware/fingerprints.mdt
+lib/hw/fingerprint.msm8994.so
+lib/libcom_fingerprints_service.so
+lib64/hw/fingerprint.msm8994.so
+lib64/libcom_fingerprints_service.so
 
 # GPS
 bin/location-mq

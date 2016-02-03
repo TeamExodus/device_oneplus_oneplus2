@@ -67,6 +67,9 @@ on post-fs-data
     mkdir /data/misc/fp 0700 system system
     mkdir /data/oemnvitems 0771 radio radio
 
+    mkdir /data/fpc_tpl 770 system system
+    mkdir /data/fpc 0770 system system
+
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
 
@@ -500,6 +503,7 @@ service per_proxy /system/bin/pm-proxy
 service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
+    group system
 
 on property:init.svc.per_mgr=running
     start per_proxy

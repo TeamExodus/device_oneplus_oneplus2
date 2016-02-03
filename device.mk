@@ -120,7 +120,6 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     mm-qcamera-app \
-    libstlport \
     Snap
 
 # Charger

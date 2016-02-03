@@ -118,9 +118,10 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing
 
 # Camera
+#   mm-qcamera-app \
+#   libstlport \
 PRODUCT_PACKAGES += \
-    mm-qcamera-app \
-    libstlport \
+    libcamera_shim \
     Snap
 
 # Charger

@@ -116,8 +116,8 @@ TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_LIBINIT_DEFINES_FILE := device/oneplus/oneplus2/init/init_oneplus2.cpp
 
-# Keymaster app checking
-TARGET_KEYMASTER_WAIT_FOR_QSEE := true
+# Keystore
+TARGET_PROVIDES_KEYMASTER := true
 
 # RIL
 TARGET_RIL_VARIANT := caf

@@ -1,10 +1,10 @@
 [
   {
-    "repository": "Exodus-Devices/oppo_common",
+    "repository": "TeamExodus/device_oppo_common",
     "target_path": "device/oppo/common"
   },
   {
-    "repository": "Exodus-Kernels/oneplus_msm8994",
+    "repository": "TeamExodus/kernel_oneplus_msm8994",
     "target_path": "kernel/oneplus/msm8994"
   }
 ]

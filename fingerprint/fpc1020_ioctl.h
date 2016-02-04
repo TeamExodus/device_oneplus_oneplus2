@@ -17,7 +17,7 @@
 
 #define FPC_HW_RESET			_IOW('K', 0, int)
 #define FPC_GET_INTERRUPT		_IOR('K', 1, int)
-#define FPC_ABORT			_IOR('K', 6, int)
+#define FPC_ABORT			    _IOR('K', 6, int)
 
 #endif // ANDROID_HARDWARE_FPC1020_IOCTL_H
 

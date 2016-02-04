@@ -122,3 +122,25 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Wifi
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0
+
+# Tweaks
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.min_pointer_dur=1 \
+    windowsmgr.max_events_per_sec=1200 \
+    ro.min.fling_velocity=6000 \
+    ro.max.fling_velocity=12400 \
+    persist.sys.root_access=1 \
+    video.accelerate.hw=1 \
+    debug.sf.hw=1 \
+    debug.egl.profiler=1 \
+    debug.egl.hw=1 \
+    debug.composition.type=gpu \
+    ro.product.multi_touch_enabled=true \
+    ro.media.dec.jpeg.memcap=8000000 \
+    ro.media.enc.hprof.vid.bps=8000000 \
+    ro.media.capture.maxres=13M \
+    ro.media.panorama.defres=6528x3680 \
+    ro.media.panorama.frameres=1920x1080 \
+    ro.camcorder.videoModes=true \
+    ro.media.enc.hprof.vid.fps=60 \
+    ro.media.enc.jpeg.quality=100

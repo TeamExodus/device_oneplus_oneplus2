@@ -116,6 +116,7 @@ static int fingerprint_enroll(struct fingerprint_device *dev,
     if (hat->version != HW_AUTH_TOKEN_VERSION) {
         return -EPROTONOSUPPORT;
     }
+    
     if (hat->challenge != device->challenge && !(hat->authenticator_type & HW_AUTH_FINGERPRINT)) {
         return -EPERM;
     }
@@ -161,16 +162,14 @@ static int fingerprint_enumerate(struct fingerprint_device *dev,
     }
 
     for (iter = fps.begin(); iter != fps.end(); ) {
-        if (device->gid != 0 && device->gid != iter->gid) {
+        if (device->gid != 0 && device->gid != iter->gid)
             iter = fps.erase(iter);
-        } else {
-            ++iter;
-        }
+        else ++iter;
     }
 
-    if (*max_size == 0) {
+    if (*max_size == 0)
         *max_size = fps.size();
-    } else {
+    else {
         for (size_t i = 0; i < *max_size && i < fps.size(); i++) {
             results[i].fid = fps[i].fid;
             results[i].gid = fps[i].gid;
@@ -189,6 +188,7 @@ static int fingerprint_remove(struct fingerprint_device *dev,
     if (device->gid != gid) {
         return -EINVAL;
     }
+    
     Fpc1020Sensor::EnrolledFingerprint fp(fid, gid);
     int ret = device->impl->removeId(fp);
     if (ret != 0) {
@@ -238,6 +238,7 @@ static void fingerprint_cb_enrollment_progress(const Fpc1020Sensor::EnrolledFing
 {
     struct fingerprint_device *dev = (struct fingerprint_device *) data;
     fingerprint_notify_t notify = fingerprint_get_notify(dev);
+    
     if (notify) {
         fingerprint_msg_t msg;
         msg.type = FINGERPRINT_TEMPLATE_ENROLLING;
@@ -255,6 +256,7 @@ static void fingerprint_cb_authenticate(const Fpc1020Sensor::EnrolledFingerprint
 {
     fpc1020_device_t *device = (fpc1020_device_t *) data;
     fingerprint_notify_t notify = fingerprint_get_notify(&device->device);
+    
     if (notify && (!fp || device->gid == 0 || device->gid == fp->gid)) {
         fingerprint_msg_t msg;
         msg.type = FINGERPRINT_AUTHENTICATED;
@@ -274,6 +276,7 @@ static void fingerprint_cb_error(int result, void *data)
 {
     struct fingerprint_device *dev = (struct fingerprint_device *) data;
     fingerprint_notify_t notify = fingerprint_get_notify(dev);
+    
     if (notify) {
         fingerprint_msg_t msg;
         msg.type = FINGERPRINT_ERROR;
@@ -304,6 +307,7 @@ static int fingerprint_open(const hw_module_t* module,
             fingerprint_cb_enrollment_progress,
             fingerprint_cb_authenticate,
             fingerprint_cb_error, dev);
+    
     if (!dev->impl) {
         delete dev;
         return -ENOMEM;

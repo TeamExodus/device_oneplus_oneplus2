@@ -28,15 +28,11 @@
 
 int Fpc1020Sensor::startAuthentication()
 {
-    if (!isIdle()) {
-        return -EINVAL;
-    }
+    if (!isIdle()) return -EINVAL;
 
     ALOGV("startAuthentication()");
     int ret = activate(true);
-    if (ret) {
-        return ret;
-    }
+    if (ret) return ret;
 
     mThread = new AuthenticationThread(this);
     mThread->run("FingerprintAuthentication");
@@ -50,16 +46,12 @@ int Fpc1020Sensor::startEnrollment(unsigned int timeout,
                                    uint32_t userId,
                                    uint32_t gid)
 {
-    if (!isIdle()) {
-        return -EINVAL;
-    }
+    if (!isIdle()) return -EINVAL;
+
 
     ALOGV("startEnrollment(%d, %d, %d)", timeout, userId, gid);
     int ret = activate(true);
-    if (ret) {
-        return ret;
-    }
-
+    if (ret) return ret;
     if (timeout) {
         mTimeoutWatchdog = new TimeoutWatchdogThread(this, timeout);
         mTimeoutWatchdog->run("FingerprintTimeout");
@@ -117,9 +109,8 @@ void Fpc1020Sensor::stopWatchdogThread()
         mTimeoutWatchdog.clear();
     }
 
-    if (watchdogThread.get()) {
+    if (watchdogThread.get())
         watchdogThread->join();
-    }
 }
 
 int Fpc1020Sensor::getEnrolledFingerprints(android::Vector<EnrolledFingerprint>& fps)
@@ -127,9 +118,7 @@ int Fpc1020Sensor::getEnrolledFingerprints(android::Vector<EnrolledFingerprint>&
     ALOGD("getEnrolledFingerprints()");
     android::Mutex::Autolock l(mTzLock);
     int ret = activate(false);
-    if (ret) {
-        return ret;
-    }
+    if (ret) return ret;
 
     ret = sendCommand(CLIENT_CMD_GET_IDS_LIST);
     if (ret == 0) {
@@ -146,9 +135,7 @@ int Fpc1020Sensor::getEnrolledFingerprints(android::Vector<EnrolledFingerprint>&
         }
     }
 
-    if (isIdle()) {
-        deactivate();
-    }
+    if (isIdle()) deactivate();
 
     return ret;
 }
@@ -156,30 +143,24 @@ int Fpc1020Sensor::getEnrolledFingerprints(android::Vector<EnrolledFingerprint>&
 int Fpc1020Sensor::removeId(EnrolledFingerprint& fp)
 {
     ALOGV("removeId(%d)", fp.fid);
-
-    if (fp.fid == 0) {
-        // Fingerprint ID 0 means 'clear all fingerprints'
-        return clearEnrolledFingerprints();
-    }
+    
+    // Fingerprint ID 0 means 'clear all fingerprints'
+    if (fp.fid == 0) return clearEnrolledFingerprints();
+    
 
     ssize_t index = mFpMetadata.indexOfKey(fp.fid);
-    if (index >= 0) {
-        fp.gid = mFpMetadata.valueAt(index).gid;
-    }
+    if (index >= 0) fp.gid = mFpMetadata.valueAt(index).gid;
 
     android::Mutex::Autolock l(mTzLock);
     int ret = activate(false);
-    if (ret) {
-        return ret;
-    }
+    if (ret) return ret;
+    
 
     fingerprint_delete_cmd_t *req = (fingerprint_delete_cmd_t *) mQseecom.getSendBuffer();
     req->id = fp.fid;
 
     ret = sendCommand(CLIENT_CMD_REMOVE_ID);
-    if (isIdle()) {
-        deactivate();
-    }
+    if (isIdle()) deactivate();
 
     if (ret == 0) {
         mFpMetadata.removeItem(fp.fid);
@@ -196,9 +177,7 @@ int Fpc1020Sensor::activate(bool connect)
 {
     int ret;
 
-    if (mQseecom.isRunning()) {
-        return 0;
-    }
+    if (mQseecom.isRunning()) return 0;
 
     ret = mQseecom.start();
     if (ret) {
@@ -257,9 +236,7 @@ int Fpc1020Sensor::activate(bool connect)
     }
 
 out:
-    if (ret) {
-        deactivate();
-    }
+    if (ret) deactivate();
     return ret;
 }
 
@@ -308,9 +285,9 @@ int Fpc1020Sensor::scanForTouchDown()
 
     fingerprint_get_touch_rsp_t *resp =
             (fingerprint_get_touch_rsp_t *) mQseecom.getReceiveBuffer();
-    if (resp->result == 0) {
+    if (resp->result == 0)
         return 0;
-    }
+    
 
     if (ioctl(mFpcFd, FPC_GET_INTERRUPT, &result) < 0) {
         ret = -errno;
@@ -384,9 +361,8 @@ int Fpc1020Sensor::clearEnrolledFingerprints()
     android::Mutex::Autolock l(mTzLock);
     android::Vector<uint32_t> ids;
     int ret = activate(false);
-    if (ret != 0) {
+    if (ret)
         return ret;
-    }
 
     ret = sendCommand(CLIENT_CMD_GET_IDS_LIST);
     if (ret != 0) {
@@ -415,9 +391,8 @@ int Fpc1020Sensor::clearEnrolledFingerprints()
 
     ALOGD("Cleared %d previously enrolled fingerprints", ids.size());
 
-    if (isIdle()) {
+    if (isIdle())
         deactivate();
-    }
 
     mFpMetadata.clear();
     mAuthenticatorId = 0;
@@ -456,9 +431,9 @@ int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
         }
     } while (ret == 0 && resp->result != 0);
 
-    if (ret) {
+    if (ret)
         ALOGV("Waiting for touch up failed: %d", ret);
-    }
+
     return ret;
 }
 
@@ -500,20 +475,16 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
     ALOGV("Started enrollment thread");
     while (!exitPending()) {
         ret = waitForTouchDown();
-        if (ret) {
-            goto out;
-        }
+        if (ret) goto out;
+        
         mSensor->mAcquiredCb(mSensor->mCbData);
 
         android::Mutex::Autolock l(mSensor->mTzLock);
         ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
-        if (ret) {
-            goto out;
-        }
+        if (ret) goto out;
+        
         ret = mSensor->sendCommand(CLIENT_CMD_FP_DO_ENROLL);
-        if (ret) {
-            goto out;
-        }
+        if (ret) goto out;
 
         ALOGD("Enrollment step done: result %d progress %d", resp->result, resp->progress);
 
@@ -540,15 +511,13 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
     {
         android::Mutex::Autolock l(mSensor->mTzLock);
         ret = mSensor->sendCommand(CLIENT_CMD_FP_END_ENROLL);
-        if (ret) {
-            goto out;
-        }
+        if (ret) goto out;
 
         ALOGD("Enrollment thread finished: result %d id 0x%08x", endResp->result, endResp->id);
         enrolledId = endResp->id;
-        if (endResp->result != 0) {
+        if (endResp->result != 0)
             ret = -EIO;
-        }
+        
     }
 
 out:
@@ -584,23 +553,20 @@ int Fpc1020Sensor::AuthenticationThread::doSingleAuthentication()
             (fingerprint_verify_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
 
     ret = waitForTouchDown();
-    if (ret) {
+    if (ret)
         goto out;
-    }
+    
 
     mSensor->mAcquiredCb(mSensor->mCbData);
 
     {
         android::Mutex::Autolock l(mSensor->mTzLock);
         ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
-        if (ret) {
-            goto out;
-        }
-
+        if (ret) goto out;
+        
         ret = mSensor->sendCommand(CLIENT_CMD_VERIFY);
-        if (ret) {
-            goto out;
-        }
+        if (ret) goto out;
+        
 
         id = resp->id;
         ALOGD("Authentication: got id 0x%08x certainty %d", resp->id, resp->certainty);

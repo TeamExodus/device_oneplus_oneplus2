@@ -307,6 +307,11 @@ on boot
     mkdir /data/misc/sensors
     chmod 0775 /data/misc/sensors
 
+    # 2015.3.26 Likelong@camera chmod /dev/stmvl6180_ranging to test Laser AF in factory mode
+    chown system system /dev/stmvl6180_ranging
+    chown system system /system/bin/laser_init
+    chmod 0750 /system/bin/laser_init
+
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
     chown system system /dev/fpc1020
@@ -428,9 +433,6 @@ on boot
     chmod 0666 /dev/drv2605
     chown system system /dev/drv2605
 
-    # Laser AF in factory mode
-    chown system system /dev/stmvl6180_ranging
-
     # for product mode flashlight
     chown system system /proc/qcom_flash
 
@@ -466,6 +468,12 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     user camera
     group camera system inet input graphics
     writepid /dev/cpuset/system-background/tasks
+
+service laserinit /system/bin/laser_init
+    class late_start
+    user root
+    group root
+    oneshot
 
 service qseecomd /system/bin/qseecomd
     class core

@@ -17,3 +17,6 @@ allow system_server proc_nav_switch:file { write };
 # run on big cores for app launch (sched_boost) - instead of just
 # boosting them to make it "more likely" to run on big cores.
 allow system_server zygote:process setsched;
+
+# laser auto focus
+allow system_server stm_sensor:chr_file rw_file_perms;

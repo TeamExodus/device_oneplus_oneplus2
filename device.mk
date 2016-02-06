@@ -122,6 +122,7 @@ PRODUCT_PACKAGES += \
 #   libstlport \
 PRODUCT_PACKAGES += \
     libcamera_shim \
+    mm-qcamera-app \
     Snap
 
 # Charger
@@ -181,7 +182,8 @@ PRODUCT_COPY_FILES += \
 
 # Keymaster
 PRODUCT_PACKAGES += \
-    keystore.msm8994
+    keystore.msm8994 \
+    gatekeeper.msm8994
 
 # Media
 PRODUCT_COPY_FILES += \

@@ -1,5 +1,4 @@
 # system.prop for OnePlus2
-
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.product=OnePlus2 \
     ro.product.device=OnePlus2 \
@@ -16,8 +15,23 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.sib16_support=1 \
     persist.radio.multisim.config=dsds \
+    persist.radio.custom_ecc=1 \
     ro.ril.gprsclass=10 \
-    ro.ril.hsxpa=1
+    ro.ril.hsxpa=1 \
+    ril.subscription.types=NV,RUIM \
+    DEVICE_PROVISIONED=1
+
+# system props for the data modules
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.use_data_netmgrd=true \
+    persist.data.netmgrd.qos.enable=true \
+    persist.data.mode=concurrent \
+    ro.data.large_tcp_window_size=true
+
+# System prop to turn on CdmaLTEPhone always
+PRODUCT_PROPERTY_OVERRIDES += \
+    telephony.lteOnCdmaDevice=1 \
+    persist.radio.rat_on=combine
 
 # NITZ
 PRODUCT_PROPERTY_OVERRIDES += \

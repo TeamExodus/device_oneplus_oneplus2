@@ -100,6 +100,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.frp.pst=/dev/block/bootdevice/by-name/config \
     drm.service.enabled=true
 
+# Setting for path for android perf library
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.at_library=libqti-at.so \
+    ro.vendor.gt_library=libqti-gt.so \
+    sys.games.gt.prof=1
+
 # Sensors
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qc.sdk.sensors.gestures=true \

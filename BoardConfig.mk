@@ -132,6 +132,9 @@ BOARD_USES_QC_TIME_SERVICES := true
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
+# Fix for new multi HAL sensors
+LOCAL_CFLAGS_arm64 += -DLIBONEPLUS_64BIT
+
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
   ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)

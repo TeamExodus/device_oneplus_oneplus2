@@ -36,6 +36,8 @@ on early-init
     mount debugfs debugfs /sys/kernel/debug
 
 on init
+    export LD_PRELOAD liboneplus.so
+
     chmod 0644 /proc/cmdline
 
     # Support legacy paths

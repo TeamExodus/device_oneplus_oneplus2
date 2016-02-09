@@ -285,6 +285,7 @@ vendor/lib/libasn1crt.so
 vendor/lib/libasn1crtx.so
 
 # Graphics
+bin/ATFWD-daemon
 vendor/lib64/libC2D2.so
 vendor/lib64/libCB.so
 vendor/lib64/libOpenCL.so

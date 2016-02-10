@@ -118,9 +118,11 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing
 
 # Camera
+#   mm-qcamera-app \
+#   libstlport \
 PRODUCT_PACKAGES += \
+    libcamera_shim \
     mm-qcamera-app \
-    libstlport \
     Snap
 
 # Charger
@@ -180,7 +182,8 @@ PRODUCT_COPY_FILES += \
 
 # Keymaster
 PRODUCT_PACKAGES += \
-    keystore.msm8994
+    keystore.msm8994 \
+    gatekeeper.msm8994
 
 # Media
 PRODUCT_COPY_FILES += \

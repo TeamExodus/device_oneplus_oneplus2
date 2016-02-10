@@ -192,15 +192,29 @@ vendor/lib/libmmcamera_ov13860_eeprom.so
 vendor/lib/libmmcamera_ov5648.so
 vendor/lib/libmmcamera_ov5648_eeprom.so
 
+# Keystore
+vendor/lib64/hw/keystore.msm8994.so
+vendor/lib/hw/keystore.msm8994.so
+
+# Gatekeeper
+vendor/lib64/hw/gatekeeper.msm8994.so
+vendor/lib/hw/gatekeeper.msm8994.so
+
 # DRM
 bin/qseecomd
 lib/libdrmdecrypt.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
 vendor/lib64/libQSEEComAPI.so
+vendor/lib64/libQSM.so
 vendor/lib64/librpmb.so
 vendor/lib64/libssd.so
+vendor/lib/libdrmfs.so
+vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
+vendor/lib/libQSM.so
+vendor/lib/librpmb.so
+vendor/lib/libssd.so
 vendor/lib/libwvdrm_L1.so
 vendor/lib/libwvm.so
 vendor/lib/libWVStreamControlAPI_L1.so
@@ -366,8 +380,15 @@ vendor/lib64/libperipheral_client.so
 vendor/lib/libperipheral_client.so
 
 # Postprocessing
+bin/mm-pp-daemon
+vendor/lib64/libdisp-aba.so
+-vendor/lib64/libmm-abl.so
+vendor/lib64/libmm-abl-oem.so
 vendor/lib64/libmm-als.so
 vendor/lib64/libmm-qdcm.so
+vendor/lib/libdisp-aba.so
+-vendor/lib/libmm-abl.so
+vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-als.so
 vendor/lib/libmm-qdcm.so
 

@@ -116,10 +116,6 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing
 
-# Surround sound mic
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/surround_sound_3mic/surround_sound_rec_AZ.cfg:system/etc/surround_sound_3mic/surround_sound_rec_AZ.cfg
-
 # Camera
 PRODUCT_PACKAGES += \
     mm-qcamera-app \

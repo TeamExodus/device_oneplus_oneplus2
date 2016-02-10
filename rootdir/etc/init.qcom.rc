@@ -62,7 +62,7 @@ on post-fs-data
     mkdir /data/misc/sfs/sfs 0700 system system
     mkdir /data/misc/sfs/tz 0700 system system
     mkdir /data/misc/dts 0770 media audio
-    mkdir /data/misc/fp 0700 system system
+    mkdir /data/misc/fp 0755 system system
     mkdir /data/oemnvitems 0771 radio radio
 
     # Create directory for TZ Apps
@@ -321,6 +321,22 @@ on boot
     chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
     chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
     chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
+    
+    # Set permissions for fpc
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
+    chmod 755 /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
+    chmod 755 /sys/devices/virtual/fpsensor/fpc1020/clock_enable
+    chmod 755 /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
 
     # Display color calibration
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal
@@ -487,6 +503,7 @@ service per_proxy /system/bin/pm-proxy
 service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
+    group system media
 
 on property:init.svc.per_mgr=running
     start per_proxy

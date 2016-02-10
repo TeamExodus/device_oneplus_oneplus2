@@ -265,6 +265,7 @@ vendor/lib64/libalarmservice_jni.so
 vendor/lib64/libasn1cper.so
 vendor/lib64/libasn1crt.so
 vendor/lib64/libasn1crtx.so
+vendor/lib64/liblowi_wifihal.so
 vendor/lib/hw/flp.default.so
 vendor/lib/libdataitems.so
 vendor/lib/libflp.so

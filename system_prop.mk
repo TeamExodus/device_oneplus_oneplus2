@@ -1,5 +1,4 @@
 # system.prop for OnePlus2
-
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.product=OnePlus2 \
     ro.product.device=OnePlus2 \
@@ -16,8 +15,23 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.sib16_support=1 \
     persist.radio.multisim.config=dsds \
+    persist.radio.custom_ecc=1 \
     ro.ril.gprsclass=10 \
-    ro.ril.hsxpa=1
+    ro.ril.hsxpa=1 \
+    ril.subscription.types=NV,RUIM \
+    DEVICE_PROVISIONED=1
+
+# system props for the data modules
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.use_data_netmgrd=true \
+    persist.data.netmgrd.qos.enable=true \
+    persist.data.mode=concurrent \
+    ro.data.large_tcp_window_size=true
+
+# System prop to turn on CdmaLTEPhone always
+PRODUCT_PROPERTY_OVERRIDES += \
+    telephony.lteOnCdmaDevice=1 \
+    persist.radio.rat_on=combine
 
 # NITZ
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -33,25 +47,26 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
-    av.offload.enable=true \
+    audio.offload.video=true \
+    audio.offload.pcm.16bit.enable=true \
+    audio.offload.pcm.24bit.enable=true \
+    audio.offload.multiple.enabled=true \
+    audio.offload.gapless.enabled=true \
+    audio.offload.passthrough=false \
+    audio.offload.buffer.size.kb=1024 \
+    audio.dolby.ds2.enabled=true \
+    audio.dolby.ds2.hardbypass=true \
+    audio.deep_buffer.media=true \
+    av.streaming.offload.enable=true \
     persist.audio.fluence.voicecall=true \
     persist.audio.fluence.voicerec=false \
     persist.audio.fluence.speaker=true \
     ro.qc.sdk.audio.fluencetype=fluence \
     ro.qc.sdk.audio.ssr=false \
     media.aac_51_output_enabled=true \
-    audio.offload.pcm.16bit.enable=true \
-    audio.offload.pcm.24bit.enable=true \
     use.voice.path.for.pcm.voip=true \
-    audio.offload.multiple.enabled=true \
-    audio.offload.gapless.enabled=true \
     mm.enable.smoothstreaming=true \
-    audio.offload.buffer.size.kb=1024 \
-    audio.dolby.ds2.enabled=true \
-    audio.dolby.ds2.hardbypass=true \
-    audio.offload.passthrough=false \
-    persist.dpm.feature=1 \
-    audio.deep_buffer.media=true
+    persist.dpm.feature=1
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -94,11 +109,21 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=480 \
     ro.opengles.version=196609
 
+# Camera
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.camera.cpp.duplication=false
+
 # QC vendor extension
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=libqti-perfd-client.so \
     ro.frp.pst=/dev/block/bootdevice/by-name/config \
     drm.service.enabled=true
+
+# Setting for path for android perf library
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.at_library=libqti-at.so \
+    ro.vendor.gt_library=libqti-gt.so \
+    sys.games.gt.prof=1
 
 # Sensors
 PRODUCT_PROPERTY_OVERRIDES += \

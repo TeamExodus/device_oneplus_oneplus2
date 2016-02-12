@@ -64,7 +64,7 @@
          Must be in the range specified by minimum and maximum. -->
     <integer name="config_screenBrightnessSettingDefault">55</integer>
 
-    <!-- Default color for notification LED is white. -->
+    <!-- Default color for notification LED is green. -->
     <color name="config_defaultNotificationColor">#ff00ff00</color>
 
     <!-- Does the notification LED support multiple colors?

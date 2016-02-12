@@ -111,7 +111,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.camera.cpp.duplication=false
+    persist.camera.cpp.duplication=false \
+    camera.disable_zsl_mode=1
 
 # QC vendor extension
 PRODUCT_PROPERTY_OVERRIDES += \

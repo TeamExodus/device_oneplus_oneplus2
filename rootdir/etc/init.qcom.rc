@@ -42,6 +42,8 @@ on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
 
+    symlink /vendor/firmware /firmware/image
+
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0

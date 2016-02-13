@@ -75,8 +75,7 @@ PRODUCT_PACKAGES += \\
     libloc_ds_api
 
 PRODUCT_PACKAGES += \\
-    libtime_genoff \\
-    libTimeService
+    libtime_genoff
 
 \$(call inherit-product, vendor/$VENDOR/$DEVICE/$DEVICE-vendor-blobs.mk)
 EOF
@@ -213,20 +212,6 @@ LOCAL_MODULE := libtime_genoff
 LOCAL_MODULE_OWNER := $VENDOR
 LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libtime_genoff.so
 LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libtime_genoff.so
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH_64 := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-LOCAL_MODULE_PATH_32 := \$(2ND_TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-LOCAL_MULTILIB := both
-LOCAL_PROPRIETARY_MODULE := true
-include \$(BUILD_PREBUILT)
-
-include \$(CLEAR_VARS)
-LOCAL_MODULE := libTimeService
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libTimeService.so
-LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libTimeService.so
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_SUFFIX := .so
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES

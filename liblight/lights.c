@@ -53,6 +53,9 @@ char const*const BLUE_LED_FILE
 char const*const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
 
+const char*const BUTTONS_FILE
+        = "/sys/class/leds/button-backlight/brightness";
+
 char const*const RED_DUTY_PCTS_FILE
         = "/sys/class/leds/red/duty_pcts";
 
@@ -192,6 +195,22 @@ set_light_backlight(struct light_device_t* dev,
     pthread_mutex_lock(&g_lock);
     err = write_int(LCD_FILE, brightness);
     pthread_mutex_unlock(&g_lock);
+    return err;
+}
+
+static int
+set_light_buttons(struct light_device_t *dev,
+        const struct light_state_t *state)
+{
+    int err = 0;
+    int brightness = rgb_to_brightness(state);
+
+    pthread_mutex_lock(&g_lock);
+
+    err = write_int(BUTTONS_FILE, brightness);
+
+    pthread_mutex_unlock(&g_lock);
+
     return err;
 }
 
@@ -413,6 +432,8 @@ static int open_lights(const struct hw_module_t* module, char const* name,
 
     if (0 == strcmp(LIGHT_ID_BACKLIGHT, name))
         set_light = set_light_backlight;
+    else if (0 == strcmp(LIGHT_ID_BUTTONS, name))
+        set_light = set_light_buttons;
     else if (0 == strcmp(LIGHT_ID_BATTERY, name))
         set_light = set_light_battery;
     else if (0 == strcmp(LIGHT_ID_NOTIFICATIONS, name))

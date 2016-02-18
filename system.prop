@@ -27,7 +27,6 @@ ro.data.large_tcp_window_size=true
 
 # System prop to turn on CdmaLTEPhone always
 telephony.lteOnCdmaDevice=1
-persist.radio.rat_on=combine
 
 # NITZ
 persist.rild.nitz_plmn=

@@ -57,6 +57,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     audio.dolby.ds2.hardbypass=true \
     audio.deep_buffer.media=true \
     av.streaming.offload.enable=true \
+    av.debug.disable.pers.cache=true \
     persist.audio.fluence.voicecall=true \
     persist.audio.fluence.voicerec=false \
     persist.audio.fluence.speaker=true \

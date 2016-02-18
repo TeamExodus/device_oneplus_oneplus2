@@ -41,6 +41,7 @@ PRODUCT_PACKAGES += \
     init.qcom.power.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
+    init.qcom.usb.sh \
     init.recovery.qcom.rc \
     ueventd.qcom.rc
 
@@ -180,6 +181,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     keystore.msm8994 \
     gatekeeper.msm8994
+
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8994
 
 # Media
 PRODUCT_COPY_FILES += \

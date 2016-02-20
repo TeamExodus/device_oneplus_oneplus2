@@ -435,6 +435,9 @@ on boot
     chmod 0664 /sys/class/power_supply/battery/input_current_settled
     chmod 0664 /sys/class/power_supply/battery/voltage_min
 
+    chown root root /persist/wlan_mac.bin
+    chmod 644 /persist/wlan_mac.bin
+
 # Services start here
 
 # start camera server as daemon

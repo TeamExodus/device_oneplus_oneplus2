@@ -48,8 +48,8 @@ on init
 on fs
     mount_all fstab.qcom
 
-    restorecon_recursive /persist
     mkdir /persist/data 0700 system system
+    restorecon_recursive /persist
 
 on post-fs
     export LD_PRELOAD libNimsWrap.so

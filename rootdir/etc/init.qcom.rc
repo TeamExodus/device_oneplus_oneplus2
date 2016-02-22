@@ -113,6 +113,15 @@ on post-fs-data
     mkdir /data/misc/display 0770 system graphics
     mkdir /persist/display 0770 system graphics
 
+    chown root system /proc/tri-state-key/keyCode_top
+    chmod 0660 /proc/tri-state-key/keyCode_top
+
+    chown root system /proc/tri-state-key/keyCode_middle
+    chmod 0660 /proc/tri-state-key/keyCode_middle
+
+    chown root system /proc/tri-state-key/keyCode_bottom
+    chmod 0660 /proc/tri-state-key/keyCode_bottom
+
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown system system /persist

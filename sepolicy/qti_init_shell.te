@@ -1,0 +1,4 @@
+allow qti_init_shell rfs_file:dir { r_dir_perms setattr };
+allow qti_init_shell rfs_file:file { getattr setattr };
+allow qti_init_shell rfs_shared_hlos_file:dir { r_dir_perms setattr };
+allow qti_init_shell rfs_shared_hlos_file:file { getattr setattr };

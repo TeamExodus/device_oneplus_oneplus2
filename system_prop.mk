@@ -44,6 +44,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.rild.nitz_short_ons_2="" \
     persist.rild.nitz_short_ons_3=""
 
+# Connectivity Engine support (CNE)
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.cne.feature=1
+
+# Data Power Manager (DPM)
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.dpm.feature=7 \
+    persist.env.fastdorm.enabled=true \
+    persist.sys.dpmd.nsrm=3
+
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     audio.offload.video=true \

@@ -48,8 +48,11 @@ on init
 on fs
     mount_all fstab.qcom
 
-    restorecon_recursive /persist
     mkdir /persist/data 0700 system system
+    restorecon_recursive /persist
+
+on post-fs
+    export LD_PRELOAD libNimsWrap.so
 
 on post-fs-data
     mkdir /data/tombstones 0771 system system
@@ -194,6 +197,8 @@ on post-fs-data
     chown -h system root /persist/sensors/sensors_settings
     mkdir -p /data/misc/sensors
     chmod -h 775 /data/misc/sensors
+
+    exec u:r:qti_init_shell:s0 -- /init.qcom.early_boot.sh
 
     setprop vold.post_fs_data_done 1
 
@@ -435,6 +440,9 @@ on boot
     chmod 0664 /sys/class/power_supply/battery/input_current_settled
     chmod 0664 /sys/class/power_supply/battery/voltage_min
 
+    chown root root /persist/wlan_mac.bin
+    chmod 644 /persist/wlan_mac.bin
+
 # Services start here
 
 # start camera server as daemon
@@ -575,6 +583,10 @@ on property:vold.decrypt=trigger_restart_framework
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
 
+service dpmd /system/bin/dpmd
+    class late_start
+    socket dpmd stream 660 root system
+
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
@@ -687,6 +699,17 @@ service sensors /system/bin/sensors.qcom
     user root
     group root
     disabled
+
+service ipacm-diag /system/bin/ipacm-diag
+    class main
+    user system
+    socket ipacm_log_file dgram 660 system net_admin
+    group net_admin qcom_diag
+
+service ipacm /system/bin/ipacm
+    class main
+    user net_admin
+    group net_admin inet
 
 on property:ro.use_data_netmgrd=false
     # netmgr not supported on specific target

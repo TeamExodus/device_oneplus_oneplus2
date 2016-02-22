@@ -148,6 +148,9 @@ BOARD_HAVE_TIMERFD_POWEROFF_ALARM := true
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
+# CNE and DPM
+BOARD_USES_QCNE := true
+
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
   ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)

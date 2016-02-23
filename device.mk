@@ -244,7 +244,7 @@ PRODUCT_PACKAGES += \
     libxml2
 
 # Connectivity Engine support (CNE)
-  PRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     CNEService \
     cneapiclient \
     com.quicinc.cne \

@@ -114,9 +114,6 @@ USE_DEVICE_SPECIFIC_LOC_API := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BOARD_HEALTHD_CUSTOM_CHARGER_RES := $(PLATFORM_PATH)/charger/images
 
-# Font
-EXTENDED_FONT_FOOTPRINT := true
-
 # Include path
 TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
 
@@ -154,8 +151,8 @@ BOARD_USES_QCNE := true
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
   ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT_BOOT_IMG_ONLY),)
-      WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
     endif
   endif
 endif

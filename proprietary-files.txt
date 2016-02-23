@@ -201,14 +201,6 @@ etc/cne/SwimConfig.xml
 etc/cne/andsfCne.xml
 etc/permissions/cneapiclient.xml
 etc/permissions/com.quicinc.cne.xml
-vendor/lib/libNimsWrap.so
-vendor/lib/libcne.so
-vendor/lib/libcneapiclient.so
-vendor/lib/libcneconn.so
-vendor/lib/libcneqmiutils.so
-vendor/lib/libvendorconn.so
-vendor/lib/libwqe.so
-vendor/lib/libxml.so
 vendor/lib64/libNimsWrap.so
 vendor/lib64/libcne.so
 vendor/lib64/libcneapiclient.so
@@ -217,6 +209,14 @@ vendor/lib64/libcneqmiutils.so
 vendor/lib64/libvendorconn.so
 vendor/lib64/libwqe.so
 vendor/lib64/libxml.so
+vendor/lib/libNimsWrap.so
+vendor/lib/libcne.so
+vendor/lib/libcneapiclient.so
+vendor/lib/libcneconn.so
+vendor/lib/libcneqmiutils.so
+vendor/lib/libvendorconn.so
+vendor/lib/libwqe.so
+vendor/lib/libxml.so
 
 # DPM
 bin/dpmd
@@ -225,22 +225,14 @@ etc/dpm/nsrm/NsrmConfiguration.xml
 etc/permissions/dpmapi.xml
 -framework/com.qti.dpmframework.jar
 -framework/dpmapi.jar
-vendor/lib/libdpmctmgr.so
-vendor/lib/libdpmfdmgr.so
-vendor/lib/libdpmframework.so
-vendor/lib/libdpmnsrm.so
 vendor/lib64/libdpmctmgr.so
 vendor/lib64/libdpmfdmgr.so
 vendor/lib64/libdpmframework.so
 vendor/lib64/libdpmnsrm.so
-
-# Keystore
-vendor/lib64/hw/keystore.msm8994.so
-vendor/lib/hw/keystore.msm8994.so
-
-# Gatekeeper
-vendor/lib64/hw/gatekeeper.msm8994.so
-vendor/lib/hw/gatekeeper.msm8994.so
+vendor/lib/libdpmctmgr.so
+vendor/lib/libdpmfdmgr.so
+vendor/lib/libdpmframework.so
+vendor/lib/libdpmnsrm.so
 
 # DRM
 bin/qseecomd
@@ -270,10 +262,14 @@ etc/firmware/fingerprints.b01
 etc/firmware/fingerprints.b02
 etc/firmware/fingerprints.b03
 etc/firmware/fingerprints.mdt
-lib/hw/fingerprint.msm8994.so
-lib/libcom_fingerprints_service.so
 lib64/hw/fingerprint.msm8994.so
 lib64/libcom_fingerprints_service.so
+lib/hw/fingerprint.msm8994.so
+lib/libcom_fingerprints_service.so
+
+# Gatekeeper
+vendor/lib64/hw/gatekeeper.msm8994.so
+vendor/lib/hw/gatekeeper.msm8994.so
 
 # GPS
 bin/loc_launcher
@@ -373,10 +369,22 @@ vendor/lib/egl/libq3dtools_esx.so
 etc/firmware/a420_pfp.fw
 etc/firmware/a420_pm4.fw
 
+# Keystore
+vendor/lib64/hw/keystore.msm8994.so
+vendor/lib/hw/keystore.msm8994.so
+
 # Listen
 vendor/lib/hw/sound_trigger.primary.msm8994.so
 
 # Media
+vendor/lib64/libDivxDrm.so
+vendor/lib64/libI420colorconvert.so
+vendor/lib64/libmmosal.so
+vendor/lib64/libmm-color-convertor.so
+vendor/lib64/libOmxAacDec.so
+vendor/lib64/libOmxAmrwbplusDec.so
+vendor/lib64/libOmxWmaDec.so
+vendor/lib64/libSHIMDivxDrm.so
 vendor/lib/libDivxDrm.so
 vendor/lib/libI420colorconvert.so
 vendor/lib/libmmosal.so
@@ -387,14 +395,6 @@ vendor/lib/libOmxEvrcDec.so
 vendor/lib/libOmxQcelp13Dec.so
 vendor/lib/libOmxWmaDec.so
 vendor/lib/libSHIMDivxDrm.so
-vendor/lib64/libDivxDrm.so
-vendor/lib64/libI420colorconvert.so
-vendor/lib64/libmmosal.so
-vendor/lib64/libmm-color-convertor.so
-vendor/lib64/libOmxAacDec.so
-vendor/lib64/libOmxAmrwbplusDec.so
-vendor/lib64/libOmxWmaDec.so
-vendor/lib64/libSHIMDivxDrm.so
 
 # Media firmware
 etc/firmware/venus.b00
@@ -502,26 +502,26 @@ vendor/lib/libmdmdetect.so
 bin/sensors.qcom
 etc/firmware/tp/14049/14049_FW_S1302.img
 etc/firmware/tp/14049/14049_FW_S3320_jdi.img
-lib/hw/sensors.msm8994.so
 lib64/hw/sensors.msm8994.so
-vendor/lib/hw/activity_recognition.msm8994.so
-vendor/lib/libsensor1.so
-vendor/lib/libsensor_reg.so
-vendor/lib/libsensor_thresh.so
-vendor/lib/libsensor_user_cal.so
-vendor/lib/sensors.ssc.so
+lib/hw/sensors.msm8994.so
 vendor/lib64/hw/activity_recognition.msm8994.so
 vendor/lib64/libsensor1.so
 vendor/lib64/libsensor_reg.so
 vendor/lib64/libsensor_thresh.so
 vendor/lib64/libsensor_user_cal.so
 vendor/lib64/sensors.ssc.so
+vendor/lib/hw/activity_recognition.msm8994.so
+vendor/lib/libsensor1.so
+vendor/lib/libsensor_reg.so
+vendor/lib/libsensor_thresh.so
+vendor/lib/libsensor_user_cal.so
+vendor/lib/sensors.ssc.so
 
 # Thermal
 vendor/bin/thermal-engine
-vendor/lib/libthermalclient.so
 vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
+vendor/lib/libthermalclient.so
 
 # Time services
 -app/TimeService/TimeService.apk

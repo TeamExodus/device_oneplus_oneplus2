@@ -188,12 +188,12 @@ on post-fs-data
     chown system system /sys/devices/virtual/timed_output/vibrator/vmax_mv
     chmod 0644 /sys/devices/virtual/timed_output/vibrator/vmax_mv
 
-    # Sensors
-    chmod -h 775 /persist/sensors
-    chmod -h 664 /persist/sensors/sensors_settings
-    chown -h system root /persist/sensors/sensors_settings
-    mkdir -p /data/misc/sensors
-    chmod -h 775 /data/misc/sensors
+    # Create directory used by sensor subsystem
+    mkdir /persist/sensors 0775 system root
+    chmod 0664 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
+    mkdir /data/misc/sensors 0775 system system
+    restorecon_recursive /data/misc/sensors
 
     setprop vold.post_fs_data_done 1
 
@@ -211,7 +211,6 @@ on boot
     symlink /dev/block/platform/soc.0 /dev/block/bootdevice
     start rmt_storage
     start rfs_access
-    start sensors
 
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/type
@@ -387,10 +386,6 @@ on boot
     chmod 0777  /system/xbin/tcpdump
 
     write /sys/module/printk/parameters/print_wall_time 1
-
-    write /sys/bus/i2c/devices/2-004a/update_fw 1
-    write /sys/bus/i2c/devices/2-004a/update_cfg 1
-    write /sys/bus/i2c/devices/2-0020/input/input0/update_fw 1
 
     # Access permission for secure touch
     chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
@@ -649,7 +644,6 @@ service sensors /system/bin/sensors.qcom
     class late_start
     user root
     group root
-    disabled
 
 on property:ro.use_data_netmgrd=false
     # netmgr not supported on specific target
@@ -837,14 +831,18 @@ service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqb
     group root
     writepid /dev/cpuset/system-background/tasks
 
+service oneplus-sensor-sh /system/bin/sh /init.msm8994.sensor.sh
+    class core
+    user root
+    oneshot
+    seclabel u:r:sensors:s0
+
 service charger /charger
     class charger
-    seclabel u:r:healthd:s0
 
 service qbcharger /charger -m 1
     disabled
     oneshot
-    seclabel u:r:healthd:s0
 
 on property:sys.qbcharger.enable=true
     start qbcharger

@@ -71,9 +71,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     bluetooth.hfp.client=1 \
-    qcom.bluetooth.soc=rome \
-    ro.bluetooth.a4wp=true \
-    ro.bluetooth.wipower=true
+    bluetooth.enable_timeout_ms=12000 \
+    qcom.bluetooth.soc=rome
 
 # CEC
 PRODUCT_PROPERTY_OVERRIDES += \

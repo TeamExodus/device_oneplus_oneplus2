@@ -134,6 +134,9 @@ TARGET_RIL_VARIANT := caf
 # RPC
 TARGET_NO_RPC := true
 
+# Peripheral manager
+TARGET_PER_MGR_ENABLED := true
+
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 BOARD_USES_QC_TIME_SERVICES := true

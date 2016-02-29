@@ -22,9 +22,6 @@ $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.m
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-# System properties
--include $(LOCAL_PATH)/system_prop.mk
-
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1080

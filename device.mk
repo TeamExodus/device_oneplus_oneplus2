@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+# Inherit oneplus2-specific vendor tree
+$(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 
 # xxxhdpi dalvik heap
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)

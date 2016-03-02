@@ -122,6 +122,9 @@ TARGET_LIBINIT_DEFINES_FILE := $(PLATFORM_PATH)/init/init_oneplus2.cpp
 # Keystore
 TARGET_PROVIDES_KEYMASTER := true
 
+# Crypto
+TARGET_HW_DISK_ENCRYPTION := true
+
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 

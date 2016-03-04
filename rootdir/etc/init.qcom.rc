@@ -49,11 +49,8 @@ on init
 on fs
     mount_all fstab.qcom
 
-    mkdir /persist/data 0700 system system
     restorecon_recursive /persist
-
-on post-fs
-    export LD_PRELOAD libNimsWrap.so
+    mkdir /persist/data 0700 system system
 
 on post-fs-data
     mkdir /data/tombstones 0771 system system
@@ -198,8 +195,6 @@ on post-fs-data
     chown system root /persist/sensors/sensors_settings
     mkdir /data/misc/sensors 0775 system system
     restorecon_recursive /data/misc/sensors
-
-    exec u:r:qti_init_shell:s0 -- /init.qcom.early_boot.sh
 
     setprop vold.post_fs_data_done 1
 
@@ -565,10 +560,6 @@ on property:init.svc.surfaceflinger=running
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
 
-service dpmd /system/bin/dpmd
-    class late_start
-    socket dpmd stream 660 root system
-
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
@@ -654,17 +645,6 @@ service sensors /system/bin/sensors.qcom
     class late_start
     user root
     group root
-
-service ipacm-diag /system/bin/ipacm-diag
-    class main
-    user system
-    socket ipacm_log_file dgram 660 system net_admin
-    group net_admin qcom_diag
-
-service ipacm /system/bin/ipacm
-    class main
-    user net_admin
-    group net_admin inet
 
 on property:ro.use_data_netmgrd=false
     # netmgr not supported on specific target

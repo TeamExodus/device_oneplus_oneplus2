@@ -1,7 +1,6 @@
 type adspd_socket, file_type;
 
 type adspd_data_file, file_type, data_file_type;
-type persist_sensors_file, file_type;
 
 type proc_touchpanel, fs_type;
 type cam_proc, file_type;

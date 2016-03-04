@@ -19,4 +19,4 @@ allow system_server proc_nav_switch:file { write };
 allow system_server zygote:process setsched;
 
 # laser auto focus
-allow system_server stm_sensor:chr_file rw_file_perms;
+allow system_server stm_sensor:chr_file { read write open ioctl };

@@ -202,6 +202,10 @@ vendor/lib64/libQSEEComAPI.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
 vendor/lib64/librpmb.so
+vendor/lib64/libsecureui.so
+vendor/lib64/libSecureUILib.so
+vendor/lib64/libsecureuisvc_jni.so
+vendor/lib64/libsecureui_svcsock.so
 vendor/lib64/libssd.so
 
 # Fingerprint

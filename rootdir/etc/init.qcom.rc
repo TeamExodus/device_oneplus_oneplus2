@@ -204,11 +204,7 @@ on post-fs-data
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
-    # Allow subsystem (modem etc) debugging
-    write /sys/module/subsystem_restart/parameters/enable_debug ${persist.sys.ssr.enable_debug}
-    write /sys/module/pil_msa/parameters/pbl_mba_boot_timeout_ms ${persist.sys.mba_boot_timeout}
-    write /sys/module/pil_msa/parameters/modem_auth_timeout_ms ${persist.sys.modem_auth_timeout}
-    write /sys/module/peripheral_loader/parameters/proxy_timeout_ms ${persist.sys.pil_proxy_timeout}
+
     write /sys/kernel/boot_adsp/boot 1
 
 on boot
@@ -632,17 +628,16 @@ service btwlancoex /system/bin/sh /system/etc/init.qcom.coex.sh
 service qmuxd /system/bin/qmuxd
     class main
     user root
-    group radio audio bluetooth gps qcom_diag
+    group radio audio bluetooth gps diag
 
 service netmgrd /system/bin/netmgrd
     class main
     group radio
 
-service qti /system/vendor/bin/qti
-    class main
-    user radio
-    group radio net_raw qcom_diag usb net_admin
-    disabled
+service qcom-sh /system/bin/sh /init.qcom.sh
+    class core
+    user root
+    oneshot
 
 service sensors /system/bin/sensors.qcom
     class late_start
@@ -830,18 +825,14 @@ service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqb
     group root
     writepid /dev/cpuset/system-background/tasks
 
-service oneplus-sensor-sh /system/bin/sh /init.msm8994.sensor.sh
-    class core
-    user root
-    oneshot
-    seclabel u:r:sensors:s0
-
 service charger /charger
     class charger
+    seclabel u:r:healthd:s0
 
 service qbcharger /charger -m 1
     disabled
     oneshot
+    seclabel u:r:healthd:s0
 
 on property:sys.qbcharger.enable=true
     start qbcharger

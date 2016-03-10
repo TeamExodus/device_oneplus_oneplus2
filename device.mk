@@ -37,10 +37,9 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.msm8994.sensor.sh \
     init.qcom.power.rc \
     init.qcom.rc \
-    init.qcom.ssr.rc \
+    init.qcom.sh \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
     init.recovery.qcom.rc \

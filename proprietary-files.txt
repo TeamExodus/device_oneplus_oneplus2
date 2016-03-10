@@ -403,6 +403,7 @@ etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar
 -framework/qcrilhook.jar
 lib64/libparam.so
+vendor/qcril.db
 vendor/lib64/libcneapiclient.so
 vendor/lib64/libconfigdb.so
 -vendor/lib64/libmdmdetect.so

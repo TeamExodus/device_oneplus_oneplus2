@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+# Inherit oneplus2-specific vendor tree
+$(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 
 # xxxhdpi dalvik heap
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
@@ -35,9 +37,9 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.msm8994.sensor.sh \
     init.qcom.power.rc \
     init.qcom.rc \
+    init.qcom.sh \
     init.qcom.ssr.rc \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
@@ -147,9 +149,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/gps.conf:system/etc/gps.conf \
     $(LOCAL_PATH)/gps/izat.conf:system/etc/izat.conf \
     $(LOCAL_PATH)/gps/quipc.conf:system/etc/quipc.conf \
-    $(LOCAL_PATH)/gps/sap.conf:system/etc/sap.conf \
-    $(LOCAL_PATH)/gps/lowi.conf:system/etc/lowi.conf \
-    $(LOCAL_PATH)/gps/xtwifi.conf:system/etc/xtwifi.conf
+    $(LOCAL_PATH)/gps/sap.conf:system/etc/sap.conf
 
 # IRQ
 PRODUCT_COPY_FILES += \
@@ -163,11 +163,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl \
     $(LOCAL_PATH)/keylayout/synaptics.kl:system/usr/keylayout/synaptics.kl
-
-# Keymaster
-PRODUCT_PACKAGES += \
-    keystore.msm8994 \
-    gatekeeper.msm8994
 
 # Lights
 PRODUCT_PACKAGES += \

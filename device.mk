@@ -113,7 +113,6 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    mm-qcamera-app \
     Snap
 
 # Charger
@@ -127,12 +126,6 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8994 \
     libtinyxml \
     memtrack.msm8994
-
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-    e2fsck \
-    make_ext4fs \
-    setup_fs
 
 # Fingerprint sensor
 PRODUCT_PACKAGES += \

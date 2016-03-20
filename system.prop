@@ -8,25 +8,17 @@ ro.build.fingerprint=OnePlus2/OnePlus2/OnePlus2:6.0.1/MMB29M/59:user/dev-keys
 rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
 rild.libargs=-d /dev/smd0
 ro.telephony.call_ring.multiple=false
-ro.telephony.default_network=9
-persist.radio.force_on_dc=true
+ro.telephony.default_network=9,1
 persist.radio.apm_sim_not_pwdn=1
 persist.radio.sib16_support=1
 persist.radio.multisim.config=dsds
-persist.radio.custom_ecc=1
 ro.ril.gprsclass=10
 ro.ril.hsxpa=1
 ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 
-# system props for the data modules
+# system prop for the data modules
 ro.use_data_netmgrd=true
-persist.data.netmgrd.qos.enable=true
-persist.data.mode=concurrent
-ro.data.large_tcp_window_size=true
-
-# System prop to turn on CdmaLTEPhone always
-telephony.lteOnCdmaDevice=1
 
 # NITZ
 persist.rild.nitz_plmn=
@@ -45,24 +37,20 @@ audio.offload.pcm.16bit.enable=true
 audio.offload.pcm.24bit.enable=true
 audio.offload.multiple.enabled=false
 audio.offload.gapless.enabled=true
-audio.offload.passthrough=false
-audio.offload.buffer.size.kb=1024
-audio.dolby.ds2.enabled=true
-audio.dolby.ds2.hardbypass=true
+audio.offload.buffer.size.kb=32
 audio.deep_buffer.media=true
 av.streaming.offload.enable=true
-av.debug.disable.pers.cache=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
-persist.audio.fluence.speaker=true
+persist.audio.fluence.speaker=false
 ro.qc.sdk.audio.fluencetype=fluence
-ro.qc.sdk.audio.ssr=false
-media.aac_51_output_enabled=true
 use.voice.path.for.pcm.voip=true
+
+# Media
 mm.enable.smoothstreaming=true
+media.aac_51_output_enabled=true
 
 # Bluetooth
-bluetooth.hfp.client=1
 bluetooth.enable_timeout_ms=12000
 qcom.bluetooth.soc=rome
 
@@ -80,62 +68,37 @@ ro.gps.agps_provider=1
 ro.qc.sdk.izat.premium.enabled=0
 ro.qc.sdk.izat.service_mask=0x0
 
-# Graphics
-debug.sf.hw=1
-debug.egl.hw=1
+# Display
 debug.composition.type=c2d
+debug.mdpcomp.idletime=600
 persist.hwc.mdpcomp.enable=true
-persist.mdpcomp.4k2kSplit=1
 persist.hwc.mdpcomp.maxpermixer=5
-persist.mdpcomp_perfhint=50
-debug.mdpcomp.logs=0
-persist.metadata_dynfps.disable=true
 persist.hwc.ptor.enable=true
-dalvik.vm.heapsize=36m
-dev.pm.dyn_samplingrate=1
-persist.demo.hdmirotationlock=false
+persist.mdpcomp.4k2kSplit=true
+persist.mdpcomp_perfhint=50
+persist.metadata_dynfps.disable=true
+ro.qualcomm.cabl=0
+debug.enable.sglscale=1
 ro.sf.lcd_density=480
 ro.opengles.version=196609
-
-# HWUI Properties
-ro.hwui.texture_cache_size=96
-ro.hwui.layer_cache_size=64
-ro.hwui.r_buffer_cache_size=12
-ro.hwui.path_cache_size=39
-ro.hwui.gradient_cache_size=1
-ro.hwui.drop_shadow_cache_size=7
-ro.hwui.texture_cache_flushrate=0.4
-ro.hwui.text_small_cache_width=2048
-ro.hwui.text_small_cache_height=2048
-ro.hwui.text_large_cache_width=3072
-ro.hwui.text_large_cache_height=2048
 
 # Camera
 persist.camera.cpp.duplication=false
 camera.disable_zsl_mode=1
 
-# QC vendor extension
-ro.vendor.extension_library=libqti-perfd-client.so
-ro.frp.pst=/dev/block/bootdevice/by-name/config
-drm.service.enabled=true
-
-# System property for cabl
-ro.qualcomm.cabl=2
-
-# Sensors
-ro.qc.sdk.sensors.gestures=true
-ro.qc.sdk.gestures.camera=false
-ro.qc.sdk.camera.facialproc=false
-
 # Time services
 persist.timed.enable=true
 
-# Video
-vidc.enc.dcvs.extra-buff-count=2
-
-# Core control
+# Perf
+ro.vendor.extension_library=libqti-perfd-client.so
 ro.min_freq_0=384000
 ro.min_freq_4=384000
 
 # Wifi
 wifi.interface=wlan0
+
+# set max starting background services
+ro.config.max_starting_bg=8
+
+# Factory reset protection
+ro.frp.pst=/dev/block/bootdevice/by-name/config

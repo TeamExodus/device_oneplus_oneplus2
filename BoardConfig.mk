@@ -1,4 +1,4 @@
-# Copyright (C) 2015 The CyanogenMod Project
+# Copyright (C) 2016 Team Exodus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -161,6 +161,10 @@ ifeq ($(HOST_OS),linux)
     endif
   endif
 endif
+
+# Firmware
+ADD_RADIO_FILES := true
+TARGET_RELEASETOOLS_EXTENSIONS := device/oneplus/oneplus2
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true

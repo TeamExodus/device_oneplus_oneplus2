@@ -1,4 +1,4 @@
-# Copyright (C) 2015 The CyanogenMod Project
+# Copyright (C) 2016 Team Exodus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -157,6 +157,10 @@ TARGET_NO_RPC := true
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 BOARD_USES_QC_TIME_SERVICES := true
+
+# Firmware
+ADD_RADIO_FILES := true
+TARGET_RELEASETOOLS_EXTENSIONS := device/oneplus/oneplus2
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true

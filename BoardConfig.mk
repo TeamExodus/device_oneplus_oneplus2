@@ -47,6 +47,7 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53
 
+TARGET_BOARD_SUFFIX := _64
 TARGET_CPU_CORTEX_A53 := true
 TARGET_USES_64_BIT_BINDER := true
 
@@ -138,9 +139,6 @@ TARGET_RIL_VARIANT := caf
 
 # RPC
 TARGET_NO_RPC := true
-
-# Peripheral manager
-TARGET_PER_MGR_ENABLED := true
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true

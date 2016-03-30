@@ -240,6 +240,7 @@ PRODUCT_PACKAGES += \
     hostapd.accept \
     hostapd.deny \
     libwpa_client \
+    libwifi-hal-qcom \
     p2p_supplicant_overlay.conf \
     wpa_supplicant \
     wpa_supplicant.conf \

@@ -1,6 +1,20 @@
 on enable-low-power
+    # disable retention
+    write /sys/module/lpm_levels/system/a53/cpu0/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/cpu1/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/cpu2/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/cpu3/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu4/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu5/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu6/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu7/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/a57-l2-retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
+
     # ensure at most one A57 is online when thermal hotplug is disabled
     write /sys/devices/system/cpu/cpu5/online 0
+    write /sys/devices/system/cpu/cpu6/online 0
+    write /sys/devices/system/cpu/cpu7/online 0
 
     # Limit A57 max freq from msm_perf module in case CPU 4 is offline
     write /sys/module/msm_performance/parameters/cpu_max_freq "4:960000 5:960000 6:960000 7:960000"
@@ -13,6 +27,7 @@ on enable-low-power
     write /sys/devices/soc.0/qcom,bcl.62/mode "enable"
 
     # configure governor settings for little cluster
+    write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
@@ -42,7 +57,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
 
     # insert core_ctl module and use conservative paremeters
-    insmod /system/lib/modules/core_ctl.ko
+    insmod /system/lib/modules/msm_core_ctl.ko
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 1
 
     # re-enable thermal and BCL hotplug

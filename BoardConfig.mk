@@ -144,6 +144,9 @@ TARGET_LIBINIT_DEFINES_FILE := $(PLATFORM_PATH)/init/init_oneplus2.cpp
 # Keystore
 TARGET_PROVIDES_KEYMASTER := true
 
+WITH_DEXPREOPT := false
+
+
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
@@ -153,14 +156,7 @@ TARGET_RIL_VARIANT := caf
 # RPC
 TARGET_NO_RPC := true
 
-# Enable dexpreopt to speed boot time
-ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
-endif
+
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true

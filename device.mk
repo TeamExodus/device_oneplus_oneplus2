@@ -19,6 +19,10 @@ $(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
+
+# Exodus BSP
+TARGET_USES_EXODUS_BSP := true
+
 # Permissions
 PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml \

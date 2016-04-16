@@ -161,6 +161,8 @@ TARGET_NO_RPC := true
 WITH_DEXPREOPT := true
 WITH_DEXPREOPT_BOOT_IMG_ONLY := true
 
+# Sensors
+USE_SENSOR_MULTI_HAL := true
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true

@@ -220,8 +220,5 @@
 # Ramdump devices
 /dev/ramdump*             0640   system     system
 
-# Add device block for FRP
-/dev/block/bootdevice/by-name/config    0660   system     system
-
 # Fingerprint sensor
 /dev/fpc1020		 0660	system	system

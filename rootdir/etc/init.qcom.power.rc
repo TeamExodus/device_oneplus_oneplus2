@@ -1,20 +1,6 @@
 on enable-low-power
-    # disable retention
-    write /sys/module/lpm_levels/system/a53/cpu0/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/cpu1/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/cpu2/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/cpu3/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu4/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu5/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu6/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/cpu7/retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a57/a57-l2-retention/idle_enabled 0
-    write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
-
     # ensure at most one A57 is online when thermal hotplug is disabled
     write /sys/devices/system/cpu/cpu5/online 0
-    write /sys/devices/system/cpu/cpu6/online 0
-    write /sys/devices/system/cpu/cpu7/online 0
 
     # Limit A57 max freq from msm_perf module in case CPU 4 is offline
     write /sys/module/msm_performance/parameters/cpu_max_freq "4:960000 5:960000 6:960000 7:960000"
@@ -27,37 +13,45 @@ on enable-low-power
     write /sys/devices/soc.0/qcom,bcl.62/mode "enable"
 
     # configure governor settings for little cluster
-    write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay "19000 960000:39000 1248000:29000"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 95
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 99
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "85 960000:95 1248000:99"
+
+    # Disable io_is_busy
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 90
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 80000
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
 
     # configure governor settings for big cluster
-    write /sys/devices/system/cpu/cpu4/online 1
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1400000:39000 1700000:19000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 95
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 99
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1248000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "90 1248000:95 1800000:70"
+
+    # Disable io_is_busy
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "85 1500000:90 1800000:70"
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 80000
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
 
+    # Configure foreground and background cpuset
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 4-7
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-3
+
     # insert core_ctl module and use conservative paremeters
-    insmod /system/lib/modules/msm_core_ctl.ko
+    insmod /system/lib/modules/core_ctl.ko
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 1
 
     # re-enable thermal and BCL hotplug
@@ -71,14 +65,14 @@ on enable-low-power
     write /sys/module/msm_performance/parameters/cpu_max_freq "4:4294967295 5:4294967295 6:4294967295 7:4294967295"
 
     # input boost configuration
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1344000"
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1248000 1:1248000 2:1248000 3:1248000 4:1248000 5:1248000 6:1248000 7:1248000"
     write /sys/module/cpu_boost/parameters/input_boost_ms 40
 
     # configure core_ctl module parameters
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 4
     write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0
-    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 72
-    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 28
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 60
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 30
     write /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms  100
     write /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster 1
     write /sys/devices/system/cpu/cpu4/core_ctl/task_thres 4
@@ -86,13 +80,12 @@ on enable-low-power
     # Setting b.L scheduler parameters
     write /proc/sys/kernel/sched_migration_fixup 1
     write /proc/sys/kernel/sched_small_task 30
-    write /proc/sys/kernel/sched_upmigrate 95
+    write /proc/sys/kernel/sched_upmigrate 99
     write /proc/sys/kernel/sched_downmigrate 85
     write /proc/sys/kernel/sched_window_stats_policy 2
     write /proc/sys/kernel/sched_ravg_hist_size 5
     write /proc/sys/kernel/sched_freq_inc_notify 400000
     write /proc/sys/kernel/sched_freq_dec_notify 400000
-    write /proc/sys/kernel/sched_boost 0
 
     write /sys/devices/system/cpu/cpu0/sched_mostly_idle_load 20
     write /sys/devices/system/cpu/cpu1/sched_mostly_idle_load 20
@@ -116,7 +109,7 @@ on enable-low-power
     write /proc/sys/kernel/sched_upmigrate_min_nice 9
 
     # Enable rps static configuration
-    write /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus "0f"
+    write /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus 8
     write /sys/class/devfreq/qcom,cpubw.33/governor "bw_hwmon"
     write /sys/class/devfreq/qcom,mincpubw.34/governor "cpufreq"
 

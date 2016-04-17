@@ -2,8 +2,13 @@
 /dev/block/bootdevice/by-name/oem_dycnvbk                       u:object_r:modem_efs_partition_device:s0
 /dev/block/bootdevice/by-name/oem_stanvbk                       u:object_r:modem_efs_partition_device:s0
 
+/data/adspd(/.*)?                                               u:object_r:adspd_data_file:s0
+
 # FRP partition
 /dev/block/bootdevice/by-name/config                            u:object_r:frp_block_device:s0
+
+# Audio DSP devices
+/dev/ttyHS3                                                     u:object_r:adspd_device:s0
 
 /persist/.genmac                                                u:object_r:wifi_data_file:s0
 /persist/.bt_nv.bin                                             u:object_r:bluetooth_data_file:s0
@@ -18,6 +23,10 @@
 
 /dev/i2c-6                                                      u:object_r:audio_device:s0
 
+/sys/devices/soc.0/tri_state_key.82/keyCode_top                 u:object_r:touchscreen_file:s0
+/sys/devices/soc.0/tri_state_key.82/keyCode_middle              u:object_r:touchscreen_file:s0
+/sys/devices/soc.0/tri_state_key.82/keyCode_bottom              u:object_r:touchscreen_file:s0
+
 /data/oemnvitems(/.*)?                                          u:object_r:nv_data_file:s0
 
 /dev/fpc1020                                                    u:object_r:fingerprint_device:s0
@@ -25,3 +34,5 @@
 /data/misc/fp/metadata                                          u:object_r:fingerprint_metadata:s0
 /data/misc/fp/cac_data                                          u:object_r:fingerprint_data:s0
 /data/misc/fp/sfs(/.*)?                                         u:object_r:fingerprint_data:s0
+/sys/devices/virtual/fpsensor/fpc1020/clock_enable              u:object_r:fingerprint_sysfs:s0
+/sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch              u:object_r:fingerprint_sysfs:s0

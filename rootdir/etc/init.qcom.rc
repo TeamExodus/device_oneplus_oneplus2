@@ -30,6 +30,7 @@ import init.qcom.usb.rc
 
 on early-init
     symlink /data/tombstones /tombstones
+    mount debugfs debugfs /sys/kernel/debug
 
 on init
     # Set permissions for persist partition
@@ -37,12 +38,30 @@ on init
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
 
+    symlink /vendor/firmware /firmware/image
+
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
+
+    # Slow Motion Scheduling Group
+    mkdir /dev/cpuctl/smsg
+    chown system system /dev/cpuctl/smsg/tasks
+    chown system system /dev/cpuctl/smsg/cpu.cfs_period_us
+    chown system system /dev/cpuctl/smsg/cpu.cfs_quota_us
+    chown system system /dev/cpuctl/smsg/cpu.cfs_quota_us_per_task
+    chmod 0666 /dev/cpuctl/smsg/tasks
+    write /dev/cpuctl/smsg/cpu.shares 52
+    write /dev/cpuctl/smsg/cpu.upmigrate_discourage 1
+
+    # Setup zram options
+    write /sys/block/zram0/comp_algorithm lz4
+    write /sys/block/zram0/max_comp_streams 4
+
 on fs
     mount_all fstab.qcom
+    swapon_all fstab.qcom
 
     restorecon_recursive /persist
     mkdir /persist/data 0700 system system
@@ -188,6 +207,13 @@ on post-fs-data
     chown system system /sys/devices/virtual/timed_output/vibrator/vmax_mv
     chmod 0644 /sys/devices/virtual/timed_output/vibrator/vmax_mv
 
+    # Create directory used by sensor subsystem
+    mkdir /persist/sensors 0775 system root
+    chmod 0664 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
+    mkdir /data/misc/sensors 0775 system system
+    restorecon_recursive /data/misc/sensors
+
     setprop vold.post_fs_data_done 1
 
 on early-boot
@@ -196,12 +222,8 @@ on early-boot
 
 on boot
     symlink /dev/block/platform/soc.0 /dev/block/bootdevice
-
-    # update foreground cpuset now that processors are up
-    write /dev/cpuset/foreground/cpus 0-7
-    write /dev/cpuset/foreground/boost/cpus 4-7
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-3
+    start rmt_storage
+    start rfs_access
 
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/type
@@ -313,6 +335,11 @@ on boot
     # Allow access for CCID command/response timeout configuration
     chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
 
+    # Mark the copy complete flag to not completed
+    write /data/misc/radio/copy_complete 0
+    chown radio radio /data/misc/radio/copy_complete
+    chmod 0660 /data/misc/radio/copy_complete
+
     # 2015.3.26 Likelong@camera chmod /dev/stmvl6180_ranging to test Laser AF in factory mode
     chown system system /dev/stmvl6180_ranging
     chown system system /system/bin/laser_init
@@ -354,8 +381,10 @@ on boot
 
     chown root system /proc/tri-state-key/keyCode_top
     chmod 0660 /proc/tri-state-key/keyCode_top
+ 
     chown root system /proc/tri-state-key/keyCode_middle
     chmod 0660 /proc/tri-state-key/keyCode_middle
+ 
     chown root system /proc/tri-state-key/keyCode_bottom
     chmod 0660 /proc/tri-state-key/keyCode_bottom
 
@@ -450,6 +479,20 @@ on boot
     chown system system /sys/class/leds/led:torch_1/brightness
     chmod 0666 /sys/class/leds/led:torch_1/brightness
 
+    # Charger
+    chown root system /sys/class/power_supply/bms/current_now
+    chown root system /sys/class/power_supply/bms/voltage_ocv
+    chown root system /sys/class/power_supply/battery/input_current_max
+    chown root system /sys/class/power_supply/battery/input_current_trim
+    chown root system /sys/class/power_supply/battery/input_current_settled
+    chown root system /sys/class/power_supply/battery/voltage_min
+    chmod 0664 /sys/class/power_supply/bms/current_now
+    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
+    chmod 0664 /sys/class/power_supply/battery/input_current_max
+    chmod 0664 /sys/class/power_supply/battery/input_current_trim
+    chmod 0664 /sys/class/power_supply/battery/input_current_settled
+    chmod 0664 /sys/class/power_supply/battery/voltage_min
+
     chown root root /persist/wlan_mac.bin
     chmod 644 /persist/wlan_mac.bin
 
@@ -476,7 +519,6 @@ service qseecomd /system/bin/qseecomd
 service perfd /system/vendor/bin/perfd
     class main
     user root
-    group root
     disabled
     writepid /dev/cpuset/system-background/tasks
 
@@ -764,6 +806,18 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
+service drmdiag /system/bin/drmdiagapp
+    class late_start
+     user root
+     disabled
+     oneshot
+
+on property:drmdiag.load=1
+    start drmdiag
+
+on property:drmdiag.load=0
+    stop drmdiag
+
 service hostapd /system/bin/hostapd /data/hostapd/hostapd.conf
     class late_start
     user root
@@ -789,6 +843,23 @@ service ril-daemon2 /system/bin/rild -c 2
     socket rild-debug2 stream 660 radio system
     user root
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
+
+service ssr_diag /system/bin/ssr_diag
+    class late_start
+    user system
+    group system
+    disabled
+
+service hvdcp /system/bin/hvdcp
+    class core
+    user root
+    disabled
+
+on property:persist.usb.hvdcp.detect=true
+    start hvdcp
+
+on property:persist.usb.hvdcp.detect=false
+    stop hvdcp
 
 service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     socket msm_irqbalance seqpacket 660 root system

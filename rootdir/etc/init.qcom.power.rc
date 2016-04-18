@@ -13,6 +13,7 @@ on enable-low-power
     write /sys/devices/soc.0/qcom,bcl.62/mode "enable"
 
     # configure governor settings for little cluster
+    write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
@@ -51,7 +52,7 @@ on enable-low-power
     write /dev/cpuset/system-background/cpus 0-3
 
     # insert core_ctl module and use conservative paremeters
-    insmod /system/lib/modules/core_ctl.ko
+    insmod /system/lib/modules/msm_core_ctl.ko
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 1
 
     # re-enable thermal and BCL hotplug

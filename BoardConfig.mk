@@ -157,14 +157,10 @@ TARGET_RIL_VARIANT := caf
 # RPC
 TARGET_NO_RPC := true
 
-# Enable dexpreopt to speed boot time
-ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
-endif
+# only dexpreopt Boot IMG
+WITH_DEXPREOPT := true
+WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true

@@ -19,8 +19,8 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay "19000 960000:39000 1248000:29000"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 96
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 19000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 960000:95 1248000:99"
@@ -34,8 +34,8 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1400000:39000 1700000:19000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 96
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 19000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1248000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "90 1248000:95 1800000:70"
@@ -43,8 +43,8 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 80000
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
 
-    # Insert core_ctl module and use conservative paremeters
-    insmod /system/lib/modules/msm_core_ctl.ko
+    # Insert H-Cube module and use conservative paremeters
+    insmod /system/lib/modules/hcube.ko
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 1
 
     # Re-enable thermal and BCL hotplug
@@ -53,12 +53,6 @@ on enable-low-power
     write /sys/devices/soc.0/qcom,bcl.62/hotplug_mask 192
     write /sys/devices/soc.0/qcom,bcl.62/hotplug_soc_mask 240
     write /sys/devices/soc.0/qcom,bcl.62/mode "enable"
-
-    # Configure foreground and background cpuset
-    write /dev/cpuset/foreground/cpus 0-7
-    write /dev/cpuset/foreground/boost/cpus 4-7
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-3
 
     # Enable low power modes
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
@@ -73,20 +67,29 @@ on enable-low-power
     # Configure core_ctl module parameters
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 4
     write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0
-    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 72
-    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 28
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 74
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 26
     write /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms  100
     write /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster 1
     write /sys/devices/system/cpu/cpu4/core_ctl/task_thres 4
 
+    # Enable H-Cube tunings for BIG cores
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_on 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_down_scale_on 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_thres_on 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_ro_use_gourd 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_correl_lvs "0 0 768000 1248000"
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_correl_use_pcost 1
+
     # Setting big.LITTLE scheduler parameters
     write /proc/sys/kernel/sched_migration_fixup 1
-    write /proc/sys/kernel/sched_small_task 30
-    write /proc/sys/kernel/sched_mostly_idle_load 20
+    write /proc/sys/kernel/sched_small_task 40
+    write /proc/sys/kernel/sched_mostly_idle_load 30
     write /proc/sys/kernel/sched_mostly_idle_nr_run 3
     write /proc/sys/kernel/sched_upmigrate_min_nice 9
-    write /proc/sys/kernel/sched_upmigrate 99
-    write /proc/sys/kernel/sched_downmigrate 85
+    write /proc/sys/kernel/sched_upmigrate 95
+    write /proc/sys/kernel/sched_downmigrate 80
+    write /proc/sys/kernel/sched_enable_power_aware 1
     write /proc/sys/kernel/sched_freq_inc_notify 400000
     write /proc/sys/kernel/sched_freq_dec_notify 400000
     write /proc/sys/kernel/sched_boost 0

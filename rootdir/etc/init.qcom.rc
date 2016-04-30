@@ -792,6 +792,7 @@ service qmuxd /system/bin/qmuxd
 
 service netmgrd /system/bin/netmgrd
     class main
+    group radio system
 
 service ipacm-diag /system/bin/ipacm-diag
     class main

@@ -47,6 +47,7 @@ audio.dolby.ds2.hardbypass=true
 audio.offload.passthrough=false
 persist.dpm.feature=1
 tunnel.audio.encode=false
+av.debug.disable.pers.cache=true
 
 # Bluetooth
 bluetooth.hfp.client=1

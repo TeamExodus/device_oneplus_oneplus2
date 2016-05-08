@@ -106,6 +106,7 @@ on enable-low-power
 
     # Set perfd properties
     rm /data/system/perfd/default_values
+    rm /data/misc/perfd/default_values
     setprop ro.min_freq_0 384000
     setprop ro.min_freq_4 384000
     start perfd

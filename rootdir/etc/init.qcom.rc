@@ -509,7 +509,7 @@ service qseecomd /system/bin/qseecomd
 service perfd /system/vendor/bin/perfd
     class main
     user root
-    group root
+    group system
     disabled
     writepid /dev/cpuset/system-background/tasks
 

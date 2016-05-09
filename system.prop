@@ -67,7 +67,7 @@ persist.spkr.cal.duration=0
 qcom.hw.aac.encoder=true
 
 # CNE
-persist.cne.feature=1
+persist.cne.feature=0
 
 # Data Power Manager (DPM)
 persist.dpm.feature=7

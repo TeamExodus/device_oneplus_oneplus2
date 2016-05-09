@@ -126,3 +126,4 @@ persist.timed.enable=true
 
 # Video
 vidc.enc.dcvs.extra-buff-count=2
+vidc.debug.perf.mode=2

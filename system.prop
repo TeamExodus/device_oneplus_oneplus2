@@ -125,3 +125,7 @@ ro.qc.sdk.camera.facialproc=false
 
 # Time services
 persist.timed.enable=true
+
+# Video
+vidc.debug.perf.mode=2
+

@@ -153,9 +153,8 @@ TARGET_RIL_VARIANT := caf
 # RPC
 TARGET_NO_RPC := true
 
-# Only dexpreopt Boot IMG
-WITH_DEXPREOPT := true
-WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+# Disable Dexpreopt
+WITH_DEXPREOPT := false
 
 # Sensors
 USE_SENSOR_MULTI_HAL := true

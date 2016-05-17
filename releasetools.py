@@ -30,14 +30,14 @@ def IncrementalOTA_Assertions(info):
 
 def InstallImage(img_name, img_file, partition, info):
   common.ZipWriteStr(info.output_zip, img_name, img_file)
-  info.script.AppendExtra(('package_extract_file("' + img_name + '", "/dev/block/platform/msm_sdcc.1/by-name/' + partition + '");'))
+  info.script.AppendExtra(('package_extract_file("' + img_name + '", "/dev/block/bootdevice/by-name/' + partition + '");'))
 
 image_partitions = {
    'NON-HLOS.bin'      : 'modem',
    'static_nvbk.bin'   : 'oem_stanvbk',
    'emmc_appsboot.mbn' : 'aboot',
    'rpm.mbn'           : 'rpm',
-   'sdi.mbn'           : 'dbi',
+   'sdi.mbn'           : 'sdi',
    'sbl1.mbn'          : 'sbl1',
    'pmic.mbn'          : 'pmic',
    'tz.mbn'            : 'tz',
@@ -46,10 +46,10 @@ image_partitions = {
 }
 
 def FullOTA_InstallEnd(info):
+  info.script.Print("Writing recommended Exodus Firmware...")
   for k, v in image_partitions.iteritems():
     try:
       img_file = info.input_zip.read("RADIO/" + k)
-      info.script.Print("Writing firmware image " + k + "...")
       InstallImage(k, img_file, v, info)
     except KeyError:
       print "warning: no " + k + " image in input target_files; not flashing " + k

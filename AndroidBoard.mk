@@ -9,7 +9,7 @@ $(foreach f, $(RADIO_FILES), \
     $(call add-radio-file,radio/$(f)))
 endif
 
-#Radio file
+#radio file
 $(call add-radio-file,firmware/NON-HLOS.bin)
 #static_nvbk image
 $(call add-radio-file,firmware/static_nvbk.bin)

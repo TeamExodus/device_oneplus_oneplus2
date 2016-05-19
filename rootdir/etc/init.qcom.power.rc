@@ -19,7 +19,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay "19000 960000:39000 1248000:29000"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 98
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 99
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 19000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
@@ -34,7 +34,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1400000:39000 1700000:19000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 98
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 99
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 19000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1248000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
@@ -60,10 +60,6 @@ on enable-low-power
     # Restore CPU 4 max freq from msm_performance
     write /sys/module/msm_performance/parameters/cpu_max_freq "4:4294967295 5:4294967295 6:4294967295 7:4294967295"
 
-    # Input boost configuration
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 40
-
     # Configure core_ctl module parameters
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 4
     write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0
@@ -83,13 +79,12 @@ on enable-low-power
 
     # Setting big.LITTLE scheduler parameters
     write /proc/sys/kernel/sched_migration_fixup 1
-    write /proc/sys/kernel/sched_small_task 40
-    write /proc/sys/kernel/sched_mostly_idle_load 30
+    write /proc/sys/kernel/sched_small_task 35
+    write /proc/sys/kernel/sched_mostly_idle_load 25
     write /proc/sys/kernel/sched_mostly_idle_nr_run 3
     write /proc/sys/kernel/sched_upmigrate_min_nice 9
-    write /proc/sys/kernel/sched_upmigrate 98
-    write /proc/sys/kernel/sched_downmigrate 82
-    write /proc/sys/kernel/sched_enable_power_aware 1
+    write /proc/sys/kernel/sched_upmigrate 99
+    write /proc/sys/kernel/sched_downmigrate 88
     write /proc/sys/kernel/sched_freq_inc_notify 400000
     write /proc/sys/kernel/sched_freq_dec_notify 400000
     write /proc/sys/kernel/sched_boost 0
@@ -107,6 +102,8 @@ on enable-low-power
     # Prepare perfd
     rm /data/system/perfd/default_values
     rm /data/misc/perfd/default_values
+    setprop ro.min_freq_0 384000
+    setprop ro.min_freq_4 384000
     # Launch perfd
     start perfd
 

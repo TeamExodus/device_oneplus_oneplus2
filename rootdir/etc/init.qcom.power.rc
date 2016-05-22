@@ -60,6 +60,10 @@ on enable-low-power
     # Restore CPU 4 max freq from msm_performance
     write /sys/module/msm_performance/parameters/cpu_max_freq "4:4294967295 5:4294967295 6:4294967295 7:4294967295"
 
+    # Input boost configuration
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:864000"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 40
+
     # Configure core_ctl module parameters
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 4
     write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0

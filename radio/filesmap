@@ -28,14 +28,15 @@
 
 #filename				device
 
-NON-HLOS.bin				/dev/block/platform/msm_sdcc.1/by-name/modem
-static_nvbk.bin				/dev/block/platform/msm_sdcc.1/by-name/oem_stanvbk
-emmc_appsboot.mbn			/dev/block/platform/msm_sdcc.1/by-name/aboot
-rpm.mbn					/dev/block/platform/msm_sdcc.1/by-name/rpm
-sdi.mbn					/dev/block/platform/msm_sdcc.1/by-name/dbi
-sbl1.mbn				/dev/block/platform/msm_sdcc.1/by-name/sbl1
-pmic.mbn				/dev/block/platform/msm_sdcc.1/by-name/pmic
-tz.mbn					/dev/block/platform/msm_sdcc.1/by-name/tz
-hyp.mbn					/dev/block/platform/msm_sdcc.1/by-name/hyp
-BTFM.bin				/dev/block/platform/msm_sdcc.1/by-name/bluetooth
+NON-HLOS.bin				/dev/block/bootdevice/by-name/modem
+static_nvbk.bin				/dev/block/bootdevice/by-name/oem_stanvbk
+emmc_appsboot.mbn			/dev/block/bootdevice/by-name/aboot
+rpm.mbn					/dev/block/bootdevice/by-name/rpm
+sdi.mbn					/dev/block/bootdevice/by-name/dbi
+sbl1.mbn				/dev/block/bootdevice/by-name/sbl1
+pmic.mbn				/dev/block/bootdevice/by-name/pmic
+tz.mbn					/dev/block/bootdevice/by-name/tz
+hyp.mbn					/dev/block/bootdevice/by-name/hyp
+BTFM.bin				/dev/block/bootdevice/by-name/bluetooth
+logo.bin				/dev/block/bootdevice/by-name/LOGO
 

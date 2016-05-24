@@ -9,7 +9,7 @@ $(foreach f, $(RADIO_FILES), \
     $(call add-radio-file,radio/$(f)))
 endif
 
-#Radio file
+#radio file
 $(call add-radio-file,firmware/NON-HLOS.bin)
 #static_nvbk image
 $(call add-radio-file,firmware/static_nvbk.bin)
@@ -29,3 +29,5 @@ $(call add-radio-file,firmware/tz.mbn)
 $(call add-radio-file,firmware/hyp.mbn)
 #Bluetooth image
 $(call add-radio-file,firmware/BTFM.bin)
+#logo image
+$(call add-radio-file,firmware/logo.bin)

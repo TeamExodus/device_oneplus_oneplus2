@@ -42,7 +42,8 @@ image_partitions = {
    'pmic.mbn'          : 'pmic',
    'tz.mbn'            : 'tz',
    'hyp.mbn'           : 'hyp',
-   'BTFM.bin'          : 'bluetooth'
+   'BTFM.bin'          : 'bluetooth',
+   'logo.bin'          : 'LOGO'
 }
 
 def FullOTA_InstallEnd(info):

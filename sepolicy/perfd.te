@@ -1,0 +1,4 @@
+allow perfd self:capability kill;
+allow perfd system_data_file:dir write;
+allow perfd system_data_file:dir { add_name remove_name };
+allow perfd system_data_file:sock_file { unlink create read write};

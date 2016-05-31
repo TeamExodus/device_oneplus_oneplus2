@@ -480,8 +480,6 @@ on post-fs-data
     mkdir /data/data/media 0770 media media
 
     # Create PERFD deamon related dirs
-    mkdir /data/misc/perfd 0755 root system
-    chmod 2755 /data/misc/perfd
     mkdir /data/system/perfd 0770 root system
     chmod 2770 /data/system/perfd
 
@@ -506,6 +504,7 @@ service perfd /system/vendor/bin/perfd
     class main
     user root
     group system
+    socket perfd seqpacket 0666 root system
     disabled
 
 service per_mgr /system/bin/pm-service

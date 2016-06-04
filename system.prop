@@ -108,8 +108,6 @@ ro.opengles.version=196609
 ro.qualcomm.perf.cores_online=2
 ro.core_ctl_min_cpu=2
 ro.core_ctl_max_cpu=4
-ro.min_freq_0=384000
-ro.min_freq_4=384000
 
 # QC vendor extension
 ro.vendor.extension_library=libqti-perfd-client.so

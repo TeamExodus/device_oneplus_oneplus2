@@ -14,5 +14,8 @@
 
 $(call inherit-product, device/oneplus/oneplus2/full_oneplus2.mk)
 
+# Exodus Recovery support
+-include device/oneplus/oneplus2/ExodusRecovery.mk
+
 # Inherit some common exodus stuff.
 $(call inherit-product, vendor/exodus/config/common_full_phone.mk)

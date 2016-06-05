@@ -16,6 +16,10 @@
 
 $(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 
+# Exodus BSP
+TARGET_USES_EXODUS_BSP := true
+TARGET_USES_EXODUS_BSP_BOOST := true
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 

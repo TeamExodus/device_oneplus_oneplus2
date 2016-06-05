@@ -1,0 +1,5 @@
+[gerrit]
+host=review.exodus-developers.net
+port=29418
+project=TeamExodus/device_oneplus_oneplus2
+defaultbranch=EXODUS-6.0

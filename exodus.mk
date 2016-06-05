@@ -14,6 +14,10 @@
 
 $(call inherit-product, device/oneplus/oneplus2/full_oneplus2.mk)
 
+# Exodus BSP
+TARGET_USES_EXODUS_BSP := true
+TARGET_USES_EXODUS_BSP_BOOST := true
+
 # Exodus Recovery support
 -include device/oneplus/oneplus2/ExodusRecovery.mk
 

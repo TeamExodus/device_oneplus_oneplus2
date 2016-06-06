@@ -20,6 +20,9 @@ $(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 TARGET_USES_EXODUS_BSP := true
 TARGET_USES_EXODUS_BSP_BOOST := true
 
+# Dexpreopt
+WITH_DEXPREOPT := false
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 

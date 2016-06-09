@@ -82,6 +82,7 @@ persist.sys.dpmd.nsrm=3
 
 # Dexopt
 dalvik.vm.dex2oat-threads=2
+dalvik.vm.boot-dex2oat-threads=4
 dalvik.vm.image-dex2oat-threads=4
 dalvik.vm.image-dex2oat-filter=everything
 

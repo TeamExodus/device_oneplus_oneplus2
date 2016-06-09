@@ -104,6 +104,7 @@ PRODUCT_COPY_FILES += \
 
 # Camera
 PRODUCT_PACKAGES += \
+    sensors.hal.tof \
     Snap
 
 # Charger

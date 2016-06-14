@@ -103,6 +103,10 @@ on enable-low-power
 
     write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 5
 
+    # adaptive LMK
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 81250
+
     # Prepare perfd
     rm /data/system/perfd/default_values
     rm /data/misc/perfd/default_values

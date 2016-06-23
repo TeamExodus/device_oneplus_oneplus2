@@ -89,6 +89,8 @@ on enable-low-power
     write /proc/sys/kernel/sched_freq_inc_notify 400000
     write /proc/sys/kernel/sched_freq_dec_notify 400000
     write /proc/sys/kernel/sched_boost 0
+    write /proc/sys/kernel/sched_init_task_load 40
+    write /proc/sys/kernel/sched_min_runtime 5
 
     # Enable rps static configuration
     write /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus "0f"

@@ -27,6 +27,7 @@ persist.radio.sw_mbn_update=0
 persist.radio.start_ota_daemon=1
 persist.radio.rat_on=combine
 persist.data.qmi.adb_logmask=0
+persist.env.fastdorm.enabled=true
 
 # Audio
 audio.offload.video=true
@@ -70,11 +71,6 @@ qcom.hw.aac.encoder=true
 
 # CNE
 persist.cne.feature=1
-
-# Data Power Manager (DPM)
-persist.dpm.feature=7
-persist.env.fastdorm.enabled=true
-persist.sys.dpmd.nsrm=3
 
 # Debug logging for DPM & CNE can be enabled via:
 # Push libdpmlog.so to system/vendor/lib|64

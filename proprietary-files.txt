@@ -446,15 +446,12 @@ app/fastdormancy/fastdormancy.apk
 bin/netmgrd
 bin/qmuxd
 bin/radish
-bin/rild
 bin/rfs_access
 bin/rmt_storage
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar
 -framework/qcrilhook.jar
-lib/libril.so
-lib64/libril.so
 lib64/libparam.so
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 -vendor/lib/libmdmdetect.so

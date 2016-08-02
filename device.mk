@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-$(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
+$(call inherit-product, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
 
 # Exodus BSP
 TARGET_USES_EXODUS_BSP := true
@@ -125,6 +125,10 @@ PRODUCT_PACKAGES += \
     memtrack.msm8994 \
     liboverlay \
     libtinyxml
+
+# Doze mode
+PRODUCT_PACKAGES += \
+    OneplusDoze
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
